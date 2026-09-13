@@ -130,13 +130,13 @@
           <span id="lang-label">English</span>
         </button>
 
-        <button onclick="openBroadcastModal()" class="hidden sm:flex px-2.5 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold border border-sky-200 transition items-center gap-1">
-          <span id="btn-broadcast-txt">📡 लिलाव नोंदवा</span>
+        <button onclick="openBroadcastModal()" class="flex px-2 sm:px-2.5 py-1 sm:py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold border border-sky-200 transition items-center gap-1">
+          <span id="btn-broadcast-txt">📡 लिलाव</span>
         </button>
 
         <button onclick="openFarmerModal()" class="px-2.5 sm:px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-[11px] sm:text-xs font-extrabold shadow-sm transition flex items-center gap-1">
           <span>✍️</span>
-          <span id="btn-report-txt" class="hidden xs:inline sm:inline">भाव नोंदवा</span>
+          <span id="btn-report-txt" class="inline">भाव नोंदवा</span>
         </button>
       </div>
     </div>
@@ -1387,8 +1387,8 @@
         ? 'महाराष्ट्र ७६ APMC बाजार समित्या थेट दर, हमीभाव व पोर्टफोलिओ'
         : 'Maharashtra 76 APMC Mandis Live Rates, MSP Benchmarks & Portfolios';
       document.getElementById('lang-label').innerText = isMr ? 'English' : 'मराठी';
-      document.getElementById('btn-broadcast-txt').innerText = isMr ? '📡 लिलाव नोंदवा' : '📡 Broadcast';
-      document.getElementById('btn-report-txt').innerText = isMr ? 'भाव नोंदवा' : 'Submit Rate';
+      document.getElementById('btn-broadcast-txt').innerText = isMr ? '📡 लिलाव' : '📡 Auction';
+      document.getElementById('btn-report-txt').innerText = isMr ? '✍️ भाव' : '✍️ Rate';
 
       document.getElementById('ticker-badge').innerText = isMr ? '🔴 थेट बातम्या' : '🔴 LIVE NEWS';
       document.getElementById('ticker-content').innerText = isMr ? tickerNews.mr : tickerNews.en;
