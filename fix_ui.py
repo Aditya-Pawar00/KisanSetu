@@ -1,41 +1,57 @@
 ﻿import os
-from PIL import Image, ImageDraw
+import zlib
+import struct
 
-# 1. Generate crisp 512x512 KisanSetu Tractor Emblem
-img = Image.new("RGBA", (512, 512), (248, 250, 252, 0))
-d = ImageDraw.Draw(img)
-# Outer emerald border
-d.ellipse([16, 16, 496, 496], fill=(16, 185, 129, 255))
-d.ellipse([32, 32, 480, 480], fill=(15, 23, 42, 255))
-# Golden sunrise
-d.ellipse([180, 100, 332, 252], fill=(245, 158, 11, 255), outline=(251, 191, 36, 255), width=8)
-# Field hills
-d.chord([40, 320, 472, 550], 180, 360, fill=(34, 197, 94, 255))
-d.chord([120, 350, 520, 580], 180, 360, fill=(21, 128, 61, 255))
-# Rear wheel
-d.ellipse([100, 320, 220, 440], fill=(51, 65, 85, 255), outline=(241, 245, 249, 255), width=12)
-d.ellipse([135, 355, 185, 405], fill=(245, 158, 11, 255))
-# Front wheel
-d.ellipse([300, 360, 380, 440], fill=(51, 65, 85, 255), outline=(241, 245, 249, 255), width=10)
-d.ellipse([325, 385, 355, 415], fill=(245, 158, 11, 255))
-# Body
-d.rectangle([170, 300, 340, 370], fill=(16, 185, 129, 255))
-d.polygon([(160, 300), (220, 220), (280, 220), (280, 300)], fill=(5, 150, 105, 255))
-d.rectangle([320, 290, 360, 370], fill=(16, 185, 129, 255))
-d.rectangle([340, 240, 352, 290], fill=(203, 213, 225, 255))
+# 1. Pure Python PNG Generator (Zero External Libraries, No PIL needed)
+def generate_png(size=192):
+    raw = bytearray()
+    for y in range(size):
+        raw.append(0)
+        for x in range(size):
+            dx = x - size / 2
+            dy = y - size / 2
+            dist_sq = dx * dx + dy * dy
+            r_out = (size * 0.46) ** 2
+            r_in = (size * 0.41) ** 2
 
-for path in ['src', 'backend/src', '.']:
-    if os.path.exists(path):
-        img.save(os.path.join(path, 'icon.png'))
-print("App icon generated successfully.")
+            if dist_sq <= r_in:
+                if y > size * 0.58:
+                    raw.extend([34, 197, 94, 255]) # green field
+                elif dist_sq <= (size * 0.18) ** 2:
+                    raw.extend([245, 158, 11, 255]) # gold sun
+                else:
+                    raw.extend([15, 23, 42, 255]) # dark slate
+            elif dist_sq <= r_out:
+                raw.extend([16, 185, 129, 255]) # emerald border
+            else:
+                raw.extend([0, 0, 0, 0]) # transparent
 
-# 2. Update api.py to serve /icon.png and use it in manifest
+    comp = zlib.compressobj()
+    compressed = comp.compress(raw) + comp.flush()
+
+    def chunk(tag, data):
+        return struct.pack('>I', len(data)) + tag + data + struct.pack('>I', zlib.crc32(tag + data) & 0xffffffff)
+
+    png = b'\x89PNG\r\n\x1a\n'
+    png += chunk(b'IHDR', struct.pack('>IIBBBBB', size, size, 8, 6, 0, 0, 0))
+    png += chunk(b'IDAT', compressed)
+    png += chunk(b'IEND', b'')
+    return png
+
+png_data = generate_png(192)
+
+for p in ['src', 'backend/src', '.']:
+    if os.path.exists(p):
+        with open(os.path.join(p, 'icon.png'), 'wb') as f:
+            f.write(png_data)
+print("Saved icon.png without PIL!")
+
+# 2. Update api.py to serve /icon.png
 for api_path in ['src/api.py', 'backend/src/api.py']:
     if os.path.exists(api_path):
         with open(api_path, 'r', encoding='utf-8') as f:
             api_c = f.read()
         
-        # Replace icon url with local self-hosted icon
         api_c = api_c.replace("https://cdn-icons-png.flaticon.com/512/2990/2990479.png", "/icon.png")
         
         if '@app.get("/icon.png")' not in api_c:
@@ -51,12 +67,12 @@ def serve_app_icon():
 """
         with open(api_path, 'w', encoding='utf-8') as f:
             f.write(api_c)
-        print(f"Updated {api_path}")
+        print(f"Updated {api_path} with /icon.png endpoint")
 
-# 3. Update frontend.html: Fix Ticker Overlap & Insert Logo
+# 3. Update frontend.html: Zero-Overlap Ticker & App Logo
 new_ticker_html = """  <!-- Live Marquee Ticker (Isolated, Zero-Overlap) -->
   <div class="relative z-50 w-full bg-gradient-to-r from-emerald-800 via-emerald-700 to-amber-600 text-xs font-bold shadow-sm flex items-center py-1 px-2 overflow-hidden border-b border-emerald-900/30">
-    <!-- Opaque Fixed Left Badge -->
+    <!-- Opaque Fixed Left Badge (z-20 so text NEVER passes through) -->
     <div class="z-20 flex-shrink-0 px-2 sm:px-2.5 py-0.5 bg-slate-900 text-amber-300 text-[10px] sm:text-[11px] font-black rounded-lg mr-2 flex items-center gap-1.5 border border-amber-400/40 shadow">
       <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
       <span id="ticker-badge" class="whitespace-nowrap">🔴 थेट बातम्या</span>
@@ -76,17 +92,14 @@ for fe_path in ['src/frontend.html', 'backend/src/frontend.html']:
         with open(fe_path, 'r', encoding='utf-8') as f:
             html = f.read()
 
-        # Add icon links to head if missing
         if '<link rel="icon"' not in html:
             html = html.replace('</head>', '  <link rel="icon" type="image/png" href="/icon.png">\n  <link rel="apple-touch-icon" href="/icon.png">\n</head>')
 
-        # Replace header emoji with real icon.png
         html = html.replace(
             '<span class="text-lg sm:text-2xl">🚜</span>',
             '<img src="/icon.png" alt="KisanSetu" class="w-7 h-7 sm:w-9 sm:h-9 object-contain rounded-lg" onerror="this.outerHTML=\'<span class=\\\'text-lg sm:text-2xl\\\'>🚜</span>\'">'
         )
 
-        # Replace ticker section with clean non-overlapping version
         t1 = html.find('<!-- Live Marquee Ticker')
         t2 = html.find('<!-- MOBILE-FIRST CLEAN RESPONSIVE HEADER -->')
         if t1 != -1 and t2 != -1:
@@ -97,4 +110,4 @@ for fe_path in ['src/frontend.html', 'backend/src/frontend.html']:
             f.write(html)
         print(f"Updated {fe_path}")
 
-print("Done! Ticker overlap fixed and app icon is live.")
+print("Done! Zero-overlap ticker and app icon generated without any extra libraries.")

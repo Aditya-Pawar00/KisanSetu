@@ -255,8 +255,8 @@ def get_manifest_json():
         "theme_color": "#15803d",
         "description": "Maharashtra 76 APMC Mandi Live Rates and Farmer Auction Slips",
         "icons": [
-            {"src": "https://cdn-icons-png.flaticon.com/512/2990/2990479.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
-            {"src": "https://cdn-icons-png.flaticon.com/512/2990/2990479.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+            {"src": "/icon.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+            {"src": "/icon.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
         ]
     }
 
@@ -265,3 +265,12 @@ def get_service_worker_file():
     from fastapi.responses import Response
     sw = "self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => clients.claim()); self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));"
     return Response(content=sw, media_type="application/javascript")
+
+
+@app.get("/icon.png")
+def serve_app_icon():
+    from fastapi.responses import FileResponse, Response
+    for p in ["icon.png", "src/icon.png", "backend/src/icon.png"]:
+        if os.path.exists(p):
+            return FileResponse(p, media_type="image/png")
+    return Response(status_code=404)

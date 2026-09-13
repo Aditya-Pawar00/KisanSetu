@@ -71,6 +71,8 @@
       #jform-display-slip button, .print-hide, #live-auction-feed-card { display: none !important; }
     }
   </style>
+  <link rel="icon" type="image/png" href="/icon.png">
+  <link rel="apple-touch-icon" href="/icon.png">
 </head>
 <body class="relative min-h-screen">
   <div id="video-container">
@@ -80,14 +82,20 @@
   </div>
   <div class="white-frosted-overlay"></div>
 
-  <!-- Live Marquee Ticker -->
-  <div class="ticker-wrap relative z-50 text-xs font-bold shadow-sm flex items-center">
-    <div class="px-2 py-0.5 bg-slate-900 text-amber-300 text-[10px] font-black tracking-wider rounded-r-lg ml-2 mr-2 flex items-center gap-1 border border-amber-400/40">
+    <!-- Live Marquee Ticker (Isolated, Zero-Overlap) -->
+  <div class="relative z-50 w-full bg-gradient-to-r from-emerald-800 via-emerald-700 to-amber-600 text-xs font-bold shadow-sm flex items-center py-1 px-2 overflow-hidden border-b border-emerald-900/30">
+    <!-- Opaque Fixed Left Badge (z-20 so text NEVER passes through) -->
+    <div class="z-20 flex-shrink-0 px-2 sm:px-2.5 py-0.5 bg-slate-900 text-amber-300 text-[10px] sm:text-[11px] font-black rounded-lg mr-2 flex items-center gap-1.5 border border-amber-400/40 shadow">
       <span class="w-1.5 h-1.5 rounded-full bg-rose-500 animate-ping"></span>
-      <span id="ticker-badge">🔴 थेट बातम्या</span>
+      <span id="ticker-badge" class="whitespace-nowrap">🔴 थेट बातम्या</span>
     </div>
-    <div class="ticker-move text-emerald-50 text-xs font-semibold" id="ticker-content">
-      लासलगाव बाजार समितीत उन्हाळ कांद्याला ₹२,४२० चा भाव • खरीप सोयाबीन हमीभाव खरेदी नोंदणी सुरू • पुणे यार्डात भाजीपाल्याची बंपर आवक • कापूस दरात तेजी: अकोला व यवतमाळ बाजारात ₹७,२५० प्रति क्विंटल • जळगाव रावेर केळीची थेट आखाती देशांत निर्यात सुरू
+
+    <!-- Independent Clipping Container (Marquee NEVER overlaps badge) -->
+    <div class="relative flex-1 overflow-hidden h-5 flex items-center">
+      <div class="pointer-events-none absolute left-0 top-0 bottom-0 w-3 bg-gradient-to-r from-emerald-700 to-transparent z-10"></div>
+      <div class="ticker-move text-emerald-50 text-xs font-semibold whitespace-nowrap" id="ticker-content">
+        लासलगाव बाजार समितीत उन्हाळ कांद्याला ₹२,४२० चा भाव • खरीप सोयाबीन हमीभाव खरेदी नोंदणी सुरू • पुणे यार्डात भाजीपाल्याची बंपर आवक • कापूस दरात तेजी: अकोला व यवतमाळ बाजारात ₹७,२५० प्रति क्विंटल • जळगाव रावेर केळीची थेट आखाती देशांत निर्यात सुरू
+      </div>
     </div>
   </div>
 
@@ -97,7 +105,7 @@
       <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
         <div class="w-9 h-9 sm:w-12 sm:h-12 rounded-xl sm:rounded-2xl bg-gradient-to-tr from-emerald-500 via-lime-400 to-amber-500 p-[2px] shadow-sm flex-shrink-0">
           <div class="w-full h-full bg-slate-900 rounded-[10px] sm:rounded-[14px] flex items-center justify-center overflow-hidden">
-            <span class="text-lg sm:text-2xl">🚜</span>
+            <img src="/icon.png" alt="KisanSetu" class="w-7 h-7 sm:w-9 sm:h-9 object-contain rounded-lg" onerror="this.outerHTML='<span class=\'text-lg sm:text-2xl\'>🚜</span>'">
           </div>
         </div>
 
