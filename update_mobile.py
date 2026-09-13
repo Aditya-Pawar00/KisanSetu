@@ -1,4 +1,6 @@
-<!DOCTYPE html>
+﻿import os
+
+html_content = """<!DOCTYPE html>
 <html lang="mr" class="light">
 <head>
   <meta charset="UTF-8">
@@ -1258,58 +1260,32 @@
 
       let text = '';
       if (currentLang === 'mr') {
-        text = `🌾 *किसानसेतू - अधिकृत कृषी उत्पन्न बाजार समिती पावती* 🌾
-
-` +
-               `🏛️ *बाजार समिती:* ${mandi}
-` +
-               `📋 *${slipDetails}*
-` +
-               `━━━━━━━━━━━━━━━━━━━━━━
-` +
-               `👤 *शेतकरी:* ${farmer}
-` +
-               `🤝 *खरेदीदार व्यापारी:* ${trader}
-` +
-               `📦 *शेतमाल व वजन:* ${cropQty}
-` +
-               `💰 *लिलाव दर:* ${rate}
-` +
-               `💵 *एकूण रक्कम:* ${gross}
-` +
-               `✅ *शेतकऱ्यास मिळणारी निव्वळ रक्कम:* ${net}
-` +
-               `━━━━━━━━━━━━━━━━━━━━━━
-` +
-               `⚖️ _महाराष्ट्र कृषी पणन नियमांनुसार प्रमाणित पावती._
-` +
+        text = `🌾 *किसानसेतू - अधिकृत कृषी उत्पन्न बाजार समिती पावती* 🌾\n\n` +
+               `🏛️ *बाजार समिती:* ${mandi}\n` +
+               `📋 *${slipDetails}*\n` +
+               `━━━━━━━━━━━━━━━━━━━━━━\n` +
+               `👤 *शेतकरी:* ${farmer}\n` +
+               `🤝 *खरेदीदार व्यापारी:* ${trader}\n` +
+               `📦 *शेतमाल व वजन:* ${cropQty}\n` +
+               `💰 *लिलाव दर:* ${rate}\n` +
+               `💵 *एकूण रक्कम:* ${gross}\n` +
+               `✅ *शेतकऱ्यास मिळणारी निव्वळ रक्कम:* ${net}\n` +
+               `━━━━━━━━━━━━━━━━━━━━━━\n` +
+               `⚖️ _महाराष्ट्र कृषी पणन नियमांनुसार प्रमाणित पावती._\n` +
                `📲 _KisanSetu App वरून थेट पाठवले._`;
       } else {
-        text = `🌾 *KisanSetu - Official APMC Mandi Auction Receipt* 🌾
-
-` +
-               `🏛️ *APMC Mandi:* ${mandi}
-` +
-               `📋 *${slipDetails}*
-` +
-               `━━━━━━━━━━━━━━━━━━━━━━
-` +
-               `👤 *Farmer:* ${farmer}
-` +
-               `🤝 *Buyer Trader:* ${trader}
-` +
-               `📦 *Produce & Weight:* ${cropQty}
-` +
-               `💰 *Auction Rate:* ${rate}
-` +
-               `💵 *Gross Value:* ${gross}
-` +
-               `✅ *Net Payable to Farmer:* ${net}
-` +
-               `━━━━━━━━━━━━━━━━━━━━━━
-` +
-               `⚖️ _Certified as per Maharashtra APMC Act._
-` +
+        text = `🌾 *KisanSetu - Official APMC Mandi Auction Receipt* 🌾\n\n` +
+               `🏛️ *APMC Mandi:* ${mandi}\n` +
+               `📋 *${slipDetails}*\n` +
+               `━━━━━━━━━━━━━━━━━━━━━━\n` +
+               `👤 *Farmer:* ${farmer}\n` +
+               `🤝 *Buyer Trader:* ${trader}\n` +
+               `📦 *Produce & Weight:* ${cropQty}\n` +
+               `💰 *Auction Rate:* ${rate}\n` +
+               `💵 *Gross Value:* ${gross}\n` +
+               `✅ *Net Payable to Farmer:* ${net}\n` +
+               `━━━━━━━━━━━━━━━━━━━━━━\n` +
+               `⚖️ _Certified as per Maharashtra APMC Act._\n` +
                `📲 _Sent via KisanSetu App._`;
       }
 
@@ -1508,3 +1484,12 @@
   </script>
 </body>
 </html>
+"""
+
+for path in ['src/frontend.html', 'backend/src/frontend.html']:
+    if os.path.exists(path):
+        with open(path, 'w', encoding='utf-8') as f:
+            f.write(html_content)
+        print(f"Updated {path} with mobile-first layout!")
+
+print("All frontends upgraded for mobile!")
