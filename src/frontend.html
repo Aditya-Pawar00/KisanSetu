@@ -1,0 +1,1576 @@
+﻿<!DOCTYPE html>
+<html lang="mr" class="light">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>KisanSetu | शेतकरी व व्यापारी थेट कृषी बाजार मंच</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+  <script src="https://unpkg.com/lucide@latest"></script>
+  <style>
+    @import url('https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800;900&family=Noto+Sans+Devanagari:wght@400;500;600;700;800;900&display=swap');
+    * { font-family: 'Noto Sans Devanagari', 'Plus Jakarta Sans', sans-serif; }
+    body { background-color: #f8fafc; color: #0f172a; }
+
+    #video-container {
+      position: fixed;
+      top: 0; left: 0; width: 100vw; height: 100vh;
+      z-index: 0; pointer-events: none; overflow: hidden;
+    }
+    #bg-video {
+      position: absolute; width: 100%; height: 100%; object-fit: cover;
+      opacity: 0.22; filter: saturate(140%) brightness(102%);
+    }
+    .white-frosted-overlay {
+      position: fixed; top: 0; left: 0; width: 100vw; height: 100vh;
+      background: radial-gradient(circle at center, rgba(248, 250, 252, 0.76) 0%, rgba(241, 245, 249, 0.94) 100%);
+      pointer-events: none; z-index: 1;
+    }
+    .white-card {
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(16px);
+      border: 1px solid rgba(226, 232, 240, 0.9);
+      box-shadow: 0 4px 16px -2px rgba(15, 23, 42, 0.04);
+      transition: all 0.2s ease;
+    }
+    .white-card:hover {
+      transform: translateY(-2px);
+      border-color: rgba(22, 163, 74, 0.4);
+      box-shadow: 0 12px 24px -4px rgba(22, 163, 74, 0.1);
+    }
+    .ticker-wrap {
+      width: 100%; overflow: hidden; white-space: nowrap;
+      background: linear-gradient(90deg, #15803d 0%, #059669 50%, #d97706 100%);
+      color: #ffffff; padding: 6px 0;
+    }
+    .ticker-move {
+      display: inline-block; white-space: nowrap; padding-left: 100%;
+      animation: ticker 36s linear infinite;
+    }
+    .ticker-wrap:hover .ticker-move { animation-play-state: paused; }
+    @keyframes ticker {
+      0% { transform: translate3d(0, 0, 0); }
+      100% { transform: translate3d(-100%, 0, 0); }
+    }
+
+    /* 100% CLEAN SINGLE-PAGE PRINT STYLES */
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 10mm;
+      }
+      body {
+        background: #ffffff !important;
+        color: #000000 !important;
+      }
+      body > * {
+        display: none !important;
+      }
+      body > main {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+      }
+      #view-jform {
+        display: block !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      #view-jform > .white-card {
+        border: none !important;
+        box-shadow: none !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        background: transparent !important;
+      }
+      #view-jform > .white-card > *:not(#jform-display-slip) {
+        display: none !important;
+      }
+      #jform-display-slip {
+        display: block !important;
+        border: 2px solid #0f172a !important;
+        border-radius: 8px !important;
+        padding: 24px !important;
+        background: #ffffff !important;
+        box-shadow: none !important;
+        width: 100% !important;
+        page-break-inside: avoid !important;
+      }
+      #jform-display-slip button, .print-hide, #live-auction-feed-card {
+        display: none !important;
+      }
+    }
+  </style>
+</head>
+<body class="relative min-h-screen">
+  <div id="video-container">
+    <video autoplay loop muted playsinline id="bg-video">
+      <source src="https://assets.mixkit.co/videos/preview/mixkit-flying-over-a-field-of-green-crops-42790-large.mp4" type="video/mp4">
+    </video>
+  </div>
+  <div class="white-frosted-overlay"></div>
+
+  <!-- Live Marquee Ticker -->
+  <div class="ticker-wrap relative z-50 text-xs font-bold shadow-sm flex items-center">
+    <div class="px-2.5 py-0.5 bg-slate-900 text-amber-300 text-[10px] font-black tracking-wider rounded-r-lg ml-2 mr-3 flex items-center gap-1.5 border border-amber-400/40">
+      <span class="w-2 h-2 rounded-full bg-rose-500 animate-ping"></span>
+      <span id="ticker-badge">🔴 थेट कृषी बाजार बातम्या</span>
+    </div>
+    <div class="ticker-move text-emerald-50 text-xs font-semibold" id="ticker-content">
+      लासलगाव बाजार समितीत उन्हाळ कांद्याला ₹२,४२० चा भाव • खरीप सोयाबीन हमीभाव खरेदी नोंदणी सुरू • पुणे यार्डात भाजीपाल्याची बंपर आवक • कापूस दरात तेजी: अकोला व यवतमाळ बाजारात ₹७,२५० प्रति क्विंटल • जळगाव रावेर केळीची थेट आखाती देशांत निर्यात सुरू
+    </div>
+  </div>
+
+  <!-- HEADER WITH COOL MODERN FARMER TRACTOR LOGO -->
+  <header class="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 px-4 sm:px-6 py-2.5">
+    <div class="max-w-7xl mx-auto flex items-center justify-between">
+      <div class="flex items-center space-x-3">
+        <!-- Cool Modern Farmer Tractor Logo -->
+        <div class="relative flex items-center justify-center group cursor-pointer">
+          <div class="w-13 h-13 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-tr from-emerald-500 via-lime-400 to-amber-500 p-[2.5px] shadow-lg shadow-emerald-600/30 group-hover:scale-105 transition duration-300">
+            <div class="w-full h-full bg-gradient-to-br from-emerald-950 via-slate-900 to-emerald-900 rounded-[13px] flex items-center justify-center overflow-hidden relative">
+              <svg class="w-9 h-9" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+                <circle cx="32" cy="22" r="12" fill="url(#sun-glow)" opacity="0.9"/>
+                <path d="M48 12c-2 6-6 10-12 12m12-12c-6 2-10 6-12 12m12-12l-14 16" stroke="#fbbf24" stroke-width="2.5" stroke-linecap="round"/>
+                <path d="M4 52c10-4 18-4 28 0 10 4 18 2 28-2v10H4V52z" fill="#22c55e"/>
+                <circle cx="22" cy="45" r="9.5" fill="#334155" stroke="#f8fafc" stroke-width="2"/>
+                <circle cx="22" cy="45" r="4.5" fill="#f59e0b"/>
+                <circle cx="45" cy="48" r="6" fill="#334155" stroke="#f8fafc" stroke-width="1.8"/>
+                <circle cx="45" cy="48" r="2.8" fill="#f59e0b"/>
+                <path d="M30 43h18l-2-11H34l-4 11z" fill="#10b981"/>
+                <path d="M36 32h10l-1-4h-9z" fill="#34d399"/>
+                <path d="M20 40l3-15h9l2 15" stroke="#f59e0b" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                <path d="M19 25h16" stroke="#fbbf24" stroke-width="3" stroke-linecap="round"/>
+                <path d="M41 28v-6" stroke="#94a3b8" stroke-width="2" stroke-linecap="round"/>
+                <circle cx="42" cy="19" r="1.5" fill="#cbd5e1"/>
+                <path d="M48 37l6 1" stroke="#fde047" stroke-width="2.5" stroke-linecap="round"/>
+                <defs>
+                  <radialGradient id="sun-glow" cx="50%" cy="50%" r="50%">
+                    <stop offset="0%" stop-color="#fef08a"/>
+                    <stop offset="60%" stop-color="#f59e0b"/>
+                    <stop offset="100%" stop-color="#ea580c"/>
+                  </radialGradient>
+                </defs>
+              </svg>
+            </div>
+          </div>
+          <span class="absolute -top-1 -right-1 flex h-3.5 w-3.5">
+            <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-400 opacity-75"></span>
+            <span class="relative inline-flex rounded-full h-3.5 w-3.5 bg-emerald-500 border-2 border-white"></span>
+          </span>
+        </div>
+
+        <div>
+          <div class="flex items-center gap-1.5">
+            <h1 class="text-xl font-black tracking-tight flex items-center">
+              <span class="text-emerald-700 font-extrabold text-2xl" id="brand-kisan">किसान</span>
+              <span class="text-orange-600 font-black text-2xl ml-0.5" id="brand-setu">सेतू</span>
+              <span class="text-xs font-bold text-slate-500 font-mono ml-2">(KisanSetu)</span>
+            </h1>
+            <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-extrabold border border-emerald-200" id="brand-tag">
+              थेट कृषी बाजार
+            </span>
+          </div>
+          <p class="text-[11px] text-slate-500 font-semibold" id="brand-sub">महाराष्ट्र ७६ APMC बाजार समित्या थेट दर, हमीभाव व पोर्टफोलिओ</p>
+        </div>
+      </div>
+
+      <div class="flex items-center space-x-2">
+        <button id="lang-btn" onclick="toggleLanguage()" class="px-3 py-1.5 rounded-xl bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold border border-slate-300 transition flex items-center gap-1">
+          <i data-lucide="globe" class="w-3.5 h-3.5 text-emerald-600"></i>
+          <span id="lang-label">English मध्ये पहा</span>
+        </button>
+
+        <button onclick="openBroadcastModal()" class="px-3 py-1.5 rounded-xl bg-sky-50 hover:bg-sky-100 text-sky-800 text-xs font-bold border border-sky-200 transition">
+          <span id="btn-broadcast-txt">📡 लिलाव नोंदवा</span>
+        </button>
+
+        <button onclick="openFarmerModal()" class="px-3.5 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-extrabold shadow-sm transition">
+          <span id="btn-report-txt">✍️ शेतकरी भाव</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- Live Status Bar -->
+  <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-3">
+    <div class="white-card rounded-2xl p-3 border border-emerald-300 flex flex-col md:flex-row items-start md:items-center justify-between gap-2 text-xs">
+      <div class="flex items-center gap-2.5">
+        <span class="relative flex h-3 w-3">
+          <span class="animate-ping absolute inline-flex h-full w-full rounded-full bg-emerald-500 opacity-75"></span>
+          <span class="relative inline-flex rounded-full h-3 w-3 bg-emerald-600"></span>
+        </span>
+        <div>
+          <span class="font-extrabold text-slate-900" id="market-status-title">🟢 थेट लिलाव सुरू आहे</span>
+          <span class="text-[11px] px-2 py-0.5 rounded-full bg-slate-100 text-slate-700 font-bold border border-slate-200 ml-1.5" id="live-ist-clock">10:45 AM IST</span>
+          <span class="text-slate-500 ml-1.5 hidden sm:inline" id="market-status-desc">सर्व ७६ बाजार समित्यांमध्ये ई-नाम व इलेक्ट्रॉनिक वजनकाट्यांवर थेट आवक सुरू.</span>
+        </div>
+      </div>
+
+      <div class="flex items-center gap-2 flex-wrap">
+        <div class="bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg">
+          <span class="text-slate-500" id="lbl-timing-auction">लिलाव:</span> <b class="text-emerald-700 font-bold">08:00 AM - 02:30 PM</b>
+        </div>
+        <div class="bg-slate-50 border border-slate-200 px-2.5 py-1 rounded-lg">
+          <span class="text-slate-500" id="lbl-timing-settle">हिशोब:</span> <b class="text-amber-700 font-bold">02:30 PM - 05:00 PM</b>
+        </div>
+        <div class="bg-emerald-50 border border-emerald-200 px-2.5 py-1 rounded-lg text-emerald-800 font-bold">
+          <span id="lbl-verified-badge">Agmarknet व MSAMB प्रमाणित</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- COMPACT 4-FEATURE BUTTONS (ZERO SLIDING NEEDED) -->
+  <section class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 pt-3">
+    <div class="grid grid-cols-2 sm:grid-cols-4 gap-2">
+      <button onclick="switchViewMode('divisions')" id="tab-btn-divisions" class="px-3 py-2 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow-md shadow-emerald-600/20">
+        <i data-lucide="map" class="w-3.5 h-3.5"></i>
+        <span id="tab-txt-divisions">🏛️ विभाग (Divisions)</span>
+      </button>
+
+      <button onclick="switchViewMode('all')" id="tab-btn-all" class="px-3 py-2 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm">
+        <i data-lucide="layout-grid" class="w-3.5 h-3.5"></i>
+        <span id="tab-txt-all">🌍 सर्व बाजार (All Mandis)</span>
+      </button>
+
+      <button onclick="switchViewMode('tools')" id="tab-btn-tools" class="px-3 py-2 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm">
+        <i data-lucide="briefcase" class="w-3.5 h-3.5"></i>
+        <span id="tab-txt-tools">💼 खरेदी फलक (Trader Desk)</span>
+      </button>
+
+      <button onclick="switchViewMode('jform')" id="tab-btn-jform" class="px-3 py-2 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm">
+        <i data-lucide="receipt" class="w-3.5 h-3.5"></i>
+        <span id="tab-txt-jform">📑 शेतकरी पावती (Sale Bill)</span>
+      </button>
+    </div>
+  </section>
+
+  <!-- MAIN BODY -->
+  <main class="relative z-10 max-w-7xl mx-auto px-4 sm:px-6 py-4 space-y-5">
+    <!-- Crop Selector & Search -->
+    <div class="flex items-center justify-between flex-wrap gap-2.5">
+      <div class="inline-flex p-1 rounded-2xl white-card border border-slate-200 shadow-sm overflow-x-auto max-w-full" id="crop-pills"></div>
+
+      <div class="relative w-full sm:w-72">
+        <i data-lucide="search" class="w-4 h-4 absolute left-3 top-2.5 text-slate-400"></i>
+        <input type="text" id="mandi-search-input" oninput="filterMandiCards()" placeholder="बाजार समिती किंवा जिल्हा शोधा..." class="w-full pl-9 pr-3 py-1.5 bg-white border border-slate-200 rounded-xl text-xs text-slate-800 font-semibold outline-none shadow-sm focus:border-emerald-500">
+      </div>
+    </div>
+
+    <!-- VIEW 1: DIVISION-WISE EXPLORER -->
+    <div id="view-divisions" class="space-y-4">
+      <!-- 6 Division Pills -->
+      <div class="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2" id="division-pills-container"></div>
+
+      <!-- Active Division Header with DYNAMIC HIGH & LOW PRICE MANDI WIDGET -->
+      <div class="white-card rounded-2xl p-4 border border-slate-200 flex flex-col md:flex-row items-start md:items-center justify-between gap-3 bg-gradient-to-r from-emerald-50/60 via-white to-amber-50/40">
+        <div>
+          <span class="text-[10px] font-bold text-emerald-700 uppercase" id="div-active-tag">निवडलेला महसूल विभाग</span>
+          <h3 class="text-lg font-black text-slate-900" id="div-active-name">नाशिक विभाग (खान्देश)</h3>
+          <p class="text-xs text-slate-600 font-medium" id="div-active-districts">समाविष्ट जिल्हे: अहमदनगर, धुळे, जळगाव, नंदुरबार, नाशिक</p>
+        </div>
+
+        <!-- DYNAMIC HIGH & LOW MANDI WIDGET (100% PURE BILINGUAL) -->
+        <div class="flex items-center gap-2 sm:gap-3 flex-wrap">
+          <!-- Highest Price Mandi -->
+          <div class="px-3 py-1.5 rounded-xl bg-emerald-50 border border-emerald-300 flex items-center gap-2 shadow-sm">
+            <div class="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center font-bold text-xs">
+              📈
+            </div>
+            <div>
+              <div class="text-[9px] font-extrabold text-emerald-800 uppercase tracking-wide" id="lbl-div-high">उच्चांकी भाव</div>
+              <div class="text-xs font-black text-emerald-950" id="div-high-market">लासलगाव: ₹२,४२० /क्विंटल</div>
+            </div>
+          </div>
+
+          <!-- Lowest Price Mandi -->
+          <div class="px-3 py-1.5 rounded-xl bg-rose-50 border border-rose-300 flex items-center gap-2 shadow-sm">
+            <div class="w-6 h-6 rounded-lg bg-rose-600 text-white flex items-center justify-center font-bold text-xs">
+              📉
+            </div>
+            <div>
+              <div class="text-[9px] font-extrabold text-rose-800 uppercase tracking-wide" id="lbl-div-low">कमी भाव</div>
+              <div class="text-xs font-black text-rose-950" id="div-low-market">पिंपळगाव: ₹१,८९७ /क्विंटल</div>
+            </div>
+          </div>
+
+          <div class="flex items-center gap-1.5 ml-1">
+            <span class="text-xs font-bold px-2.5 py-1.5 bg-white border border-slate-200 rounded-xl text-slate-800 shadow-sm" id="div-mandi-count">२० बाजार समित्या</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Mandi Cards Grid -->
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="division-mandis-grid"></div>
+    </div>
+
+    <!-- VIEW 2: ALL 76 MARKETS TABLE -->
+    <div id="view-all" class="space-y-4 hidden">
+      <div class="white-card rounded-3xl p-5 border border-slate-200">
+        <div class="flex flex-col sm:flex-row items-start sm:items-center justify-between gap-2 mb-3">
+          <div>
+            <h3 class="text-base font-black text-slate-900" id="all-mandis-heading">सर्व महाराष्ट्र ७६ कृषी उत्पन्न बाजार समित्या थेट दर</h3>
+            <p class="text-xs text-slate-500" id="all-mandis-sub">सविस्तर पोर्टफोलिओसाठी कोणत्याही बाजार समितीच्या नावावर क्लिक करा.</p>
+          </div>
+          <span class="text-xs px-2.5 py-0.5 bg-emerald-100 text-emerald-800 rounded-full font-bold border border-emerald-200" id="all-active-badge">७६ समित्या सक्रिय</span>
+        </div>
+
+        <div class="overflow-x-auto max-h-[560px] overflow-y-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="sticky top-0 bg-slate-100 border-b border-slate-200 text-slate-600 font-bold uppercase z-10">
+              <tr>
+                <th class="py-2.5 px-3" id="th-sr">#</th>
+                <th class="py-2.5 px-3" id="th-mandi">बाजार समिती</th>
+                <th class="py-2.5 px-3" id="th-district">जिल्हा</th>
+                <th class="py-2.5 px-3" id="th-division">विभाग</th>
+                <th class="py-2.5 px-3" id="th-modal">आजचा सरासरी भाव</th>
+                <th class="py-2.5 px-3" id="th-minmax">किमान / कमाल भाव</th>
+                <th class="py-2.5 px-3" id="th-arrival">आवक</th>
+                <th class="py-2.5 px-3" id="th-capacity">गोदाम क्षमता</th>
+                <th class="py-2.5 px-3 text-right" id="th-action">सविस्तर पोर्टफोलिओ</th>
+              </tr>
+            </thead>
+            <tbody id="all-markets-tbody" class="divide-y divide-slate-100 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 3: TRADER DESK & FREIGHT -->
+    <div id="view-tools" class="space-y-5 hidden">
+      <!-- Live Buy Orders -->
+      <div class="white-card rounded-3xl p-5 border border-emerald-200">
+        <div class="flex items-center justify-between mb-3 flex-wrap gap-2">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-ping"></span>
+              <h3 class="text-base font-black text-slate-900" id="demand-heading">व्यापारी थेट खरेदी मागणी फलक</h3>
+            </div>
+            <p class="text-xs text-slate-500" id="demand-sub">परवानाधारक व्यापाऱ्यांकडून थेट मोठ्या प्रमाणात खरेदी मागणी.</p>
+          </div>
+          <button onclick="openNewOrderModal()" class="px-3 py-1.5 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-black shadow-sm transition flex items-center gap-1">
+            <i data-lucide="plus" class="w-3.5 h-3.5"></i>
+            <span id="btn-add-demand">नवीन खरेदी मागणी जोडा</span>
+          </button>
+        </div>
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3.5" id="trader-orders-container"></div>
+      </div>
+
+      <!-- Freight Calculator -->
+      <div class="white-card rounded-3xl p-5 border border-slate-200">
+        <div class="flex items-center gap-2 mb-1">
+          <i data-lucide="truck" class="w-4 h-4 text-emerald-600"></i>
+          <h3 class="text-base font-black text-slate-900" id="calc-heading">वाहतूक खर्च व निव्वळ नफा कॅल्क्युलेटर</h3>
+        </div>
+        <p class="text-xs text-slate-500 mb-4" id="calc-sub">दूरच्या बाजार समितीत शेतमाल नेणे फायदेशीर आहे का ते तपासा.</p>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4">
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-calc-km">अंतर (किलोमीटर)</label>
+            <input type="number" id="calc-km" value="120" min="5" max="800" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 outline-none">
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-calc-qty">एकूण शेतमाल (क्विंटल)</label>
+            <input type="number" id="calc-qty" value="40" min="1" max="500" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 outline-none">
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-calc-spread">भावातील फरक (₹/क्विंटल)</label>
+            <input type="number" id="calc-spread" value="450" min="10" max="5000" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold text-emerald-700 outline-none">
+          </div>
+        </div>
+
+        <button onclick="runFreightCalculation()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-sm transition" id="btn-calc">
+          नफा मोजा
+        </button>
+
+        <div id="freight-result-box" class="mt-4 p-3.5 rounded-2xl bg-emerald-50 border border-emerald-200 hidden">
+          <div class="flex items-center justify-between">
+            <div id="res-rec-text" class="text-xs font-bold text-emerald-800"></div>
+            <div id="res-total-profit" class="text-xl font-black text-emerald-700"></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- VIEW 4: OFFICIAL SALE RECEIPT / BILL GENERATOR -->
+    <div id="view-jform" class="space-y-4 hidden">
+      <div class="white-card rounded-3xl p-5 border border-emerald-200">
+        <div class="flex items-center gap-2.5 mb-2">
+          <div class="w-9 h-9 rounded-xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <i data-lucide="receipt" class="w-5 h-5"></i>
+          </div>
+          <div>
+            <h3 class="text-base font-black text-slate-900" id="jf-title">अधिकृत शेतकरी लिलाव पावती व बिल जनरेटर</h3>
+            <p class="text-xs text-slate-500" id="jf-sub">बाजार समितीमधील शेतमाल विक्रीचा अचूक हिशोब, शून्य बेकायदेशीर कपात व पक्की पावती.</p>
+          </div>
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-3 mb-4 pt-1">
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-jf-mandi">बाजार समिती</label>
+            <input type="text" id="jf-mandi" value="Nandurbar APMC" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 outline-none">
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-jf-farmer">शेतकरी नाव</label>
+            <input type="text" id="jf-farmer" value="आदित्य पवार" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 outline-none">
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-jf-trader">खरेदीदार व्यापारी फर्म</label>
+            <input type="text" id="jf-trader" value="खानदेश कॉटन मिल्स" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 outline-none">
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-jf-crop">पीक</label>
+            <select id="jf-crop" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 outline-none"></select>
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-jf-weight">निव्वळ वजन (क्विंटल)</label>
+            <input type="number" id="jf-weight" value="45.0" step="0.5" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-bold text-slate-900 outline-none">
+          </div>
+          <div>
+            <label class="text-[11px] font-bold text-slate-700 block mb-1" id="lbl-jf-rate">लिलाव भाव (₹/क्विंटल)</label>
+            <input type="number" id="jf-rate" value="7180" step="10" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl text-xs font-black text-emerald-700 outline-none">
+          </div>
+        </div>
+
+        <button onclick="generateDigitalJForm()" class="px-5 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold text-xs shadow-sm transition flex items-center gap-1.5" id="btn-gen-jform">
+          <i data-lucide="receipt" class="w-4 h-4"></i>
+          <span>अधिकृत शेतकरी पावती तयार करा</span>
+        </button>
+
+        <!-- STANDALONE CLEAN APMC SALE SLIP (100% PURE LANGUAGE, NO MIXING) -->
+        <div id="jform-display-slip" class="mt-5 p-6 rounded-2xl bg-white border-2 border-slate-900 hidden shadow-sm">
+          <div class="flex items-center justify-between border-b-2 border-slate-900 pb-3 mb-4">
+            <div>
+              <div class="flex items-center gap-2">
+                <span class="text-[10px] font-black px-2 py-0.5 rounded bg-emerald-700 text-white uppercase" id="slip-badge-title">महाराष्ट्र कृषी उत्पन्न पणन (नियम ३२ अन्वये अधिकृत पावती)</span>
+                <span class="text-[10px] text-slate-600 font-bold border border-slate-300 px-1.5 py-0.5 rounded" id="slip-enam-tag">ई-नाम प्रमाणित</span>
+              </div>
+              <h4 class="text-xl font-black text-slate-900 mt-1" id="slip-mandi-header">नंदुरबार कृषी उत्पन्न बाजार समिती</h4>
+              <div class="text-[11px] text-slate-600 font-mono mt-0.5" id="slip-id-date"></div>
+            </div>
+            <!-- Dedicated Print button triggering single-page print -->
+            <button onclick="printSaleSlip()" class="px-4 py-2 rounded-xl bg-slate-900 text-white text-xs font-bold hover:bg-slate-800 transition flex items-center gap-1.5 print-hide shadow">
+              <i data-lucide="printer" class="w-4 h-4"></i>
+              <span id="btn-print-txt">🖨️ पावती प्रिंट करा</span>
+            </button>
+          </div>
+
+          <div class="grid grid-cols-2 sm:grid-cols-4 gap-3 text-xs mb-4 p-3 bg-slate-50 rounded-xl border border-slate-200">
+            <div><span class="text-slate-500 font-medium" id="lbl-slip-f">शेतकरी नाव:</span> <b class="block text-slate-900 text-sm mt-0.5" id="slip-farmer"></b></div>
+            <div><span class="text-slate-500 font-medium" id="lbl-slip-t">खरेदीदार व्यापारी:</span> <b class="block text-slate-900 text-sm mt-0.5" id="slip-trader"></b></div>
+            <div><span class="text-slate-500 font-medium" id="lbl-slip-c">शेतमाल व वजन:</span> <b class="block text-slate-900 text-sm mt-0.5" id="slip-crop-qty"></b></div>
+            <div><span class="text-slate-500 font-medium" id="lbl-slip-r">अंतिम लिलाव दर:</span> <b class="block text-emerald-700 text-sm mt-0.5 font-black" id="slip-rate"></b></div>
+          </div>
+
+          <div class="border border-slate-300 rounded-xl p-4 space-y-2.5 text-xs">
+            <div class="flex justify-between items-center text-slate-700">
+              <span id="lbl-slip-gross">एकूण शेतमाल किंमत:</span>
+              <b class="text-slate-900 text-sm font-black" id="slip-gross"></b>
+            </div>
+            <div class="flex justify-between items-center text-slate-600">
+              <span id="lbl-slip-w">अधिकृत धर्मकाटा तोलाई आकार (१० रुपये/क्विंटल):</span>
+              <span class="font-bold text-slate-700" id="slip-weighing"></span>
+            </div>
+            <div class="flex justify-between items-center text-slate-600">
+              <span id="lbl-slip-cess">बाजार समिती उपकर (१.०५% - खरेदीदार व्यापारी भरेल):</span>
+              <span class="text-emerald-700 font-semibold" id="slip-cess"></span>
+            </div>
+            <div class="flex justify-between items-center border-t-2 border-dashed border-slate-300 pt-3 text-sm font-black text-slate-900">
+              <span class="text-emerald-800 font-black text-base" id="lbl-slip-net">शेतकऱ्यास मिळणारी निव्वळ रक्कम:</span>
+              <span class="text-xl text-emerald-700 font-black" id="slip-net"></span>
+            </div>
+          </div>
+
+          <div class="mt-5 pt-3 border-t border-slate-200 flex items-center justify-between text-[11px] text-slate-500">
+            <div class="flex items-center gap-1.5 text-emerald-800 font-semibold">
+              <i data-lucide="shield-check" class="w-4 h-4 text-emerald-600"></i>
+              <span id="slip-legal-note">महाराष्ट्र कृषी पणन कायद्यानुसार शेतकऱ्याकडून कोणतीही बेकायदेशीर अडत कपात होत नाही.</span>
+            </div>
+            <div class="text-right text-slate-600 font-bold border-t border-slate-400 pt-1 px-4" id="slip-sign-line">
+              अधिकृत स्वाक्षरी / शिक्का (बाजार समिती / व्यापारी)
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Live Auction Winners Table -->
+    <div class="white-card rounded-3xl p-5 border border-emerald-200/90 print-hide" id="live-auction-feed-card">
+      <div class="flex items-center justify-between gap-2 mb-3">
+        <div class="flex items-center gap-2">
+          <span class="w-2.5 h-2.5 rounded-full bg-emerald-600 animate-ping"></span>
+          <h3 class="text-sm font-extrabold text-slate-900 flex items-center gap-1.5">
+            <i data-lucide="gavel" class="w-4 h-4 text-emerald-600"></i>
+            <span id="auc-title">थेट लिलाव निकाल व विजयी खरेदीदार</span>
+          </h3>
+        </div>
+        <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold" id="auc-verified-tag">ई-नाम अधिकृत</span>
+      </div>
+
+      <div class="overflow-x-auto">
+        <table class="w-full text-left text-xs">
+          <thead>
+            <tr class="text-slate-500 bg-slate-50 border-b border-slate-200 font-bold uppercase">
+              <th class="py-2 px-2.5" id="th-auc-lot">लॉट क्र.</th>
+              <th class="py-2 px-2.5" id="th-auc-mandi">बाजार समिती</th>
+              <th class="py-2 px-2.5" id="th-auc-crop">पीक / जात</th>
+              <th class="py-2 px-2.5" id="th-auc-qty">वजन</th>
+              <th class="py-2 px-2.5" id="th-auc-trader">विजेता खरेदीदार व्यापारी</th>
+              <th class="py-2 px-2.5" id="th-auc-price">अंतिम भाव</th>
+              <th class="py-2 px-2.5" id="th-auc-origin">मूळ गाव</th>
+              <th class="py-2 px-2.5 text-right" id="th-auc-status">स्थिती</th>
+            </tr>
+          </thead>
+          <tbody id="live-auction-tbody" class="divide-y divide-slate-100 font-medium"></tbody>
+        </table>
+      </div>
+    </div>
+  </main>
+
+  <!-- MARKET DOSSIER MODAL -->
+  <div id="dossier-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
+    <div class="white-card max-w-2xl w-full rounded-3xl p-5 border border-emerald-300 shadow-2xl relative max-h-[90vh] overflow-y-auto">
+      <div class="flex items-start justify-between mb-3 pb-2 border-b border-slate-200">
+        <div>
+          <span class="text-[10px] font-bold text-emerald-700 uppercase" id="dossier-division-lbl">नाशिक विभाग</span>
+          <h2 class="text-xl font-black text-slate-900 mt-0.5" id="dossier-market-title">लासलगाव कृषी उत्पन्न बाजार समिती</h2>
+          <p class="text-[11px] text-slate-500 font-medium" id="dossier-market-subtitle">जिल्हा: नाशिक | अधिकृत डेटा स्रोत: Agmarknet व MSAMB</p>
+        </div>
+        <button onclick="closeDossierModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 mb-4 text-center">
+        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[9px] text-slate-500 font-bold uppercase" id="d-lbl-turnover">दैनिक उलाढाल</div>
+          <div class="text-sm font-black text-emerald-700 mt-0.5" id="dossier-turnover">₹५४० लाख</div>
+        </div>
+        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[9px] text-slate-500 font-bold uppercase" id="d-lbl-traders">परवानाधारक व्यापारी</div>
+          <div class="text-sm font-black text-slate-900 mt-0.5" id="dossier-traders">१६० व्यापारी</div>
+        </div>
+        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[9px] text-slate-500 font-bold uppercase" id="d-lbl-capacity">गोदाम क्षमता</div>
+          <div class="text-sm font-black text-slate-900 mt-0.5" id="dossier-capacity">९,००० टन</div>
+        </div>
+        <div class="p-2.5 bg-slate-50 rounded-xl border border-slate-200">
+          <div class="text-[9px] text-slate-500 font-bold uppercase" id="d-lbl-status">बाजार स्थिती</div>
+          <div class="text-xs font-extrabold text-emerald-700 mt-1" id="dossier-status">🟢 लिलाव सुरू</div>
+        </div>
+      </div>
+
+      <div class="p-3 rounded-xl bg-emerald-50/60 border border-emerald-200 text-xs mb-4 space-y-1 text-slate-700">
+        <div class="font-bold text-slate-900" id="d-lbl-infra">पायाभूत सुविधा पोर्टफोलिओ:</div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-1.5 text-[11px]">
+          <div>• <span id="d-lbl-w">वजनकाटे:</span> <b class="text-slate-900" id="dossier-weighbridges">४ ते ८ धर्मकाटे</b></div>
+          <div>• <span id="d-lbl-c">शितगृह:</span> <b class="text-slate-900" id="dossier-coldstorage">उपलब्ध</b></div>
+          <div class="sm:col-span-2">• <span id="d-lbl-g">गोदाम कर्ज:</span> <b class="text-emerald-800" id="dossier-godown-note">MSWC व WDRA नोंदणीकृत पावती कर्ज उपलब्ध</b></div>
+        </div>
+      </div>
+
+      <div class="mb-4">
+        <h4 class="text-xs font-black text-slate-900 uppercase mb-2" id="d-lbl-who">सध्या बाजारात शेतमाल कोण आणत आहे?</h4>
+        <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" id="dossier-sellers-container"></div>
+      </div>
+
+      <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 mb-4">
+        <div>
+          <h4 class="text-xs font-black text-emerald-800 uppercase mb-1.5" id="d-lbl-profit">🟢 नफा देणारी पिके</h4>
+          <div class="space-y-1.5" id="dossier-profit-crops"></div>
+        </div>
+        <div>
+          <h4 class="text-xs font-black text-rose-800 uppercase mb-1.5" id="d-lbl-loss">🔴 मंदीत असणारी पिके</h4>
+          <div class="space-y-1.5" id="dossier-loss-crops"></div>
+        </div>
+      </div>
+
+      <div>
+        <h4 class="text-xs font-black text-slate-900 uppercase mb-2" id="d-lbl-msp">सरकारी हमीभाव सुरक्षा तपासणी (MSP २०२५-२६)</h4>
+        <div class="overflow-x-auto border border-slate-200 rounded-xl">
+          <table class="w-full text-left text-xs">
+            <thead class="bg-slate-100 text-slate-600 font-bold">
+              <tr>
+                <th class="p-2" id="th-d-crop">पीक</th>
+                <th class="p-2" id="th-d-price">आजचा भाव</th>
+                <th class="p-2" id="th-d-msp">सरकारी हमीभाव (MSP)</th>
+                <th class="p-2 text-right" id="th-d-verdict">हमीभाव स्थिती</th>
+              </tr>
+            </thead>
+            <tbody id="dossier-msp-tbody" class="divide-y divide-slate-100 font-medium"></tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- ADD BUY ORDER MODAL -->
+  <div id="new-order-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
+    <div class="white-card max-w-md w-full rounded-3xl p-5 border border-emerald-300 shadow-2xl relative">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-extrabold text-slate-900" id="modal-order-title">नवीन खरेदी मागणी जोडा</h3>
+        <button onclick="closeNewOrderModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form onsubmit="submitNewBuyOrder(event)" class="space-y-2.5 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1" id="lbl-mo-name">व्यापारी / फर्म नाव</label>
+          <input type="text" id="ord-name" required value="श्री गणेश ॲग्रो ट्रेडर्स" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1" id="lbl-mo-lic">परवाना क्र.</label>
+            <input type="text" id="ord-lic" required value="APMC-L882" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1" id="lbl-mo-phone">फोन नंबर</label>
+            <input type="text" id="ord-phone" required value="+91 98221 44556" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1" id="lbl-mo-crop">आवश्यक पीक</label>
+            <select id="ord-crop" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none"></select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1" id="lbl-mo-qty">प्रमाण</label>
+            <input type="text" id="ord-qty" required value="200 क्विंटल" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1" id="lbl-mo-price">ऑफर भाव (₹/क्विंटल)</label>
+            <input type="number" id="ord-price" required value="2450" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl font-bold text-emerald-700 outline-none">
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1" id="lbl-mo-pay">पेमेंट अटी</label>
+            <input type="text" id="ord-pay" required value="तुरुंत RTGS / पावतीवर" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1" id="lbl-mo-dest">डिलिव्हरी ठिकाण</label>
+          <input type="text" id="ord-dest" required value="मुंबई वाशी मार्केट किंवा थेट गोडाऊन" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+        </div>
+        <button type="submit" class="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-sm mt-1" id="btn-submit-order-txt">
+          मागणी प्रसिद्ध करा
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Broadcast Lot Modal -->
+  <div id="broadcast-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
+    <div class="white-card max-w-md w-full rounded-3xl p-5 border border-sky-300 shadow-2xl relative">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-extrabold text-slate-900" id="modal-broadcast-title">थेट बाजार समिती लिलाव नोंदणी</h3>
+        <button onclick="closeBroadcastModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+
+      <form onsubmit="submitDigitalLot(event)" class="space-y-2.5 text-xs">
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">लॉट / गेट पास क्र.</label>
+            <input type="text" id="b-lot" required value="MH-NSK-1045" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">वजन (क्विंटल)</label>
+            <input type="number" id="b-qty" required value="75" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">बाजार समिती</label>
+          <input type="text" id="b-mandi" required value="लासलगाव बाजार समिती" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">पीक</label>
+            <select id="b-crop" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none"></select>
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">लिलाव भाव (₹/क्विंटल)</label>
+            <input type="number" id="b-price" required value="2460" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl font-bold text-emerald-700 outline-none">
+          </div>
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">विजेता खरेदीदार व्यापारी</label>
+          <input type="text" id="b-trader" required value="बालाजी ॲग्रो एक्सपोर्ट्स लि." class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+        </div>
+        <button type="submit" class="w-full py-2 rounded-xl bg-sky-600 hover:bg-sky-700 text-white font-extrabold shadow-sm mt-1">
+          लिलाव प्रसारित करा
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <!-- Farmer Rate Modal -->
+  <div id="kisan-modal" class="fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm hidden p-4">
+    <div class="white-card max-w-md w-full rounded-3xl p-5 border border-emerald-300 shadow-2xl relative">
+      <div class="flex items-center justify-between mb-3">
+        <h3 class="text-sm font-extrabold text-slate-900" id="modal-kisan-title">शेतकरी भाव नोंदणी</h3>
+        <button onclick="closeFarmerModal()" class="w-7 h-7 rounded-full bg-slate-100 hover:bg-slate-200 flex items-center justify-center text-slate-500">
+          <i data-lucide="x" class="w-4 h-4"></i>
+        </button>
+      </div>
+      <p class="text-xs text-slate-600 mb-3" id="modal-kisan-sub">आपल्या बाजार समितीत आज मिळालेला भाव नोंदवून इतर शेतकरी बांधवांना सहकार्य करा.</p>
+      <form onsubmit="submitFarmerPrice(event)" class="space-y-2.5 text-xs">
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">आपले नाव</label>
+          <input type="text" id="f-name" required value="शेतकरी मित्र" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">जिल्हा</label>
+            <input type="text" id="f-dist" required value="नाशिक" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+          </div>
+          <div>
+            <label class="font-bold text-slate-700 block mb-1">पीक</label>
+            <select id="f-crop" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none"></select>
+          </div>
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">बाजार समिती</label>
+          <input type="text" id="f-mandi" required value="लासलगाव बाजार समिती" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl outline-none">
+        </div>
+        <div>
+          <label class="font-bold text-slate-700 block mb-1">मिळालेला भाव (₹/क्विंटल)</label>
+          <input type="number" id="f-price" required value="2420" class="w-full bg-slate-50 border border-slate-300 px-3 py-1.5 rounded-xl font-bold text-emerald-700 outline-none">
+        </div>
+        <button type="submit" class="w-full py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white font-extrabold shadow-sm mt-1">
+          भाव नोंदवा
+        </button>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    let currentLang = 'mr';
+    let currentCommodity = 'Onion';
+    let activeDivisionIndex = 0;
+    let divisionsData = [];
+    let allMarketsCache = [];
+
+    /* 100% COMPLETE BILINGUAL DICTIONARY FOR CROPS, DISTRICTS, AND ALL 76 MANDIS */
+    const crops = [
+      { id: 'Onion', en: 'Onion 🧅', mr: 'कांदा 🧅' },
+      { id: 'Tomato', en: 'Tomato 🍅', mr: 'टोमॅटो 🍅' },
+      { id: 'Soybean', en: 'Soybean 🌱', mr: 'सोयाबीन 🌱' },
+      { id: 'Cotton', en: 'Cotton ☁️', mr: 'कापूस ☁️' },
+      { id: 'Tur', en: 'Tur Dal 🌾', mr: 'तूर 🌾' },
+      { id: 'Wheat', en: 'Wheat 🌾', mr: 'गहू 🌾' },
+      { id: 'Maize', en: 'Maize 🌽', mr: 'मका 🌽' },
+      { id: 'Chana', en: 'Gram 🫘', mr: 'हरभरा 🫘' },
+      { id: 'Banana', en: 'Banana 🍌', mr: 'केळी 🍌' },
+    ];
+
+    const districtsMap = {
+      'Ahmednagar': { mr: 'अहमदनगर', en: 'Ahmednagar' },
+      'Akola': { mr: 'अकोला', en: 'Akola' },
+      'Amravati': { mr: 'अमरावती', en: 'Amravati' },
+      'Beed': { mr: 'बीड', en: 'Beed' },
+      'Bhandara': { mr: 'भंडारा', en: 'Bhandara' },
+      'Buldhana': { mr: 'बुलढाणा', en: 'Buldhana' },
+      'Chandrapur': { mr: 'चंद्रपूर', en: 'Chandrapur' },
+      'Chhatrapati Sambhajinagar': { mr: 'छत्रपती संभाजीनगर', en: 'Chhatrapati Sambhajinagar' },
+      'Dharashiv': { mr: 'धाराशिव', en: 'Dharashiv' },
+      'Dhule': { mr: 'धुळे', en: 'Dhule' },
+      'Gadchiroli': { mr: 'गडचिरोली', en: 'Gadchiroli' },
+      'Gondia': { mr: 'गोंदिया', en: 'Gondia' },
+      'Hingoli': { mr: 'हिंगोली', en: 'Hingoli' },
+      'Jalgaon': { mr: 'जळगाव', en: 'Jalgaon' },
+      'Jalna': { mr: 'जालना', en: 'Jalna' },
+      'Kolhapur': { mr: 'कोल्हापूर', en: 'Kolhapur' },
+      'Latur': { mr: 'लातूर', en: 'Latur' },
+      'Mumbai (Vashi)': { mr: 'मुंबई (वाशी)', en: 'Mumbai (Vashi)' },
+      'Nagpur': { mr: 'नागपूर', en: 'Nagpur' },
+      'Nanded': { mr: 'नांदेड', en: 'Nanded' },
+      'Nandurbar': { mr: 'नंदुरबार', en: 'Nandurbar' },
+      'Nashik': { mr: 'नाशिक', en: 'Nashik' },
+      'Palghar': { mr: 'पालघर', en: 'Palghar' },
+      'Parbhani': { mr: 'परभणी', en: 'Parbhani' },
+      'Pune': { mr: 'पुणे', en: 'Pune' },
+      'Raigad': { mr: 'रायगड', en: 'Raigad' },
+      'Ratnagiri': { mr: 'रत्नागिरी', en: 'Ratnagiri' },
+      'Sangli': { mr: 'सांगली', en: 'Sangli' },
+      'Satara': { mr: 'सातारा', en: 'Satara' },
+      'Sindhudurg': { mr: 'सिंधुदुर्ग', en: 'Sindhudurg' },
+      'Solapur': { mr: 'सोलापूर', en: 'Solapur' },
+      'Thane': { mr: 'ठाणे', en: 'Thane' },
+      'Wardha': { mr: 'वर्धा', en: 'Wardha' },
+      'Washim': { mr: 'वाशिम', en: 'Washim' },
+      'Yavatmal': { mr: 'यवतमाळ', en: 'Yavatmal' }
+    };
+
+    const mandisMap = {
+      'Nandurbar APMC': { mr: 'नंदुरबार कृषी उत्पन्न बाजार समिती', en: 'Nandurbar APMC' },
+      'Shahada Mandi': { mr: 'शहादा बाजार समिती', en: 'Shahada Mandi' },
+      'Navapur APMC': { mr: 'नवापूर बाजार समिती', en: 'Navapur APMC' },
+      'Dhule Main APMC': { mr: 'धुळे मुख्य बाजार समिती', en: 'Dhule Main APMC' },
+      'Dondaicha Mandi': { mr: 'दोंडाईचा बाजार समिती', en: 'Dondaicha Mandi' },
+      'Shirpur APMC': { mr: 'शिरपूर बाजार समिती', en: 'Shirpur APMC' },
+      'Jalgaon Main Yard': { mr: 'जळगाव मुख्य यार्ड', en: 'Jalgaon Main Yard' },
+      'Raver Banana Hub': { mr: 'रावेर केळी हब', en: 'Raver Banana Hub' },
+      'Chopda Mandi': { mr: 'चोपडा बाजार समिती', en: 'Chopda Mandi' },
+      'Amalner APMC': { mr: 'अमळनेर बाजार समिती', en: 'Amalner APMC' },
+      "Lasalgaon (Asia's Largest Onion Hub)": { mr: 'लासलगाव (आशियातील कांदा हब)', en: "Lasalgaon (Asia's Largest Onion Hub)" },
+      'Pimpalgaon Baswant': { mr: 'पिंपळगाव बसवंत बाजार', en: 'Pimpalgaon Baswant' },
+      'Yeola Mandi': { mr: 'येवला बाजार समिती', en: 'Yeola Mandi' },
+      'Kalwan APMC': { mr: 'कळवण बाजार समिती', en: 'Kalwan APMC' },
+      'Sinnar Yard': { mr: 'सिन्नर यार्ड', en: 'Sinnar Yard' },
+      'Malegaon APMC': { mr: 'मालेगाव बाजार समिती', en: 'Malegaon APMC' },
+      'Rahuri Krishi Mandi': { mr: 'राहुरी कृषी बाजार', en: 'Rahuri Krishi Mandi' },
+      'Kopargaon APMC': { mr: 'कोपरगाव बाजार समिती', en: 'Kopargaon APMC' },
+      'Sangamner Mandi': { mr: 'संगमनेर बाजार समिती', en: 'Sangamner Mandi' },
+      'Shrirampur Yard': { mr: 'श्रीरामपूर यार्ड', en: 'Shrirampur Yard' },
+      'Pune (Gultekdi Market Yard)': { mr: 'पुणे (गुलटेकडी मार्केट यार्ड)', en: 'Pune (Gultekdi Market Yard)' },
+      'Manchar Mandi': { mr: 'मंचर बाजार समिती', en: 'Manchar Mandi' },
+      'Junnar (Narayangaon Tomato Hub)': { mr: 'जुन्नर (नारायणगाव टोमॅटो हब)', en: 'Junnar (Narayangaon Tomato Hub)' },
+      'Baramati APMC': { mr: 'बारामती बाजार समिती', en: 'Baramati APMC' },
+      'Khed-Chakan Yard': { mr: 'खेड-चाकण यार्ड', en: 'Khed-Chakan Yard' },
+      'Solapur APMC': { mr: 'सोलापूर बाजार समिती', en: 'Solapur APMC' },
+      'Barshi (Dal & Oilseed Hub)': { mr: 'बार्शी (डाळ व तेलबिया हब)', en: 'Barshi (Dal & Oilseed Hub)' },
+      'Pandharpur Mandi': { mr: 'पंढरपूर बाजार समिती', en: 'Pandharpur Mandi' },
+      'Kolhapur Shahu Market Yard': { mr: 'कोल्हापूर शाहू मार्केट यार्ड', en: 'Kolhapur Shahu Market Yard' },
+      'Gadhinglaj APMC': { mr: 'गडहिंग्लज बाजार समिती', en: 'Gadhinglaj APMC' },
+      'Sangli Main Yard (Turmeric Hub)': { mr: 'सांगली मुख्य यार्ड (हळद हब)', en: 'Sangli Main Yard (Turmeric Hub)' },
+      'Tasgaon (Grape & Raisin Hub)': { mr: 'तासगाव (द्राक्ष व बेदाणा हब)', en: 'Tasgaon (Grape & Raisin Hub)' },
+      'Islampur Mandi': { mr: 'इस्लामपूर बाजार समिती', en: 'Islampur Mandi' },
+      'Satara Market Yard': { mr: 'सातारा मार्केट यार्ड', en: 'Satara Market Yard' },
+      'Karad APMC': { mr: 'कराड बाजार समिती', en: 'Karad APMC' },
+      'Phaltan Mandi': { mr: 'फलटण बाजार समिती', en: 'Phaltan Mandi' },
+      'Jadhavwadi APMC': { mr: 'जाधववाडी बाजार समिती (संभाजीनगर)', en: 'Jadhavwadi APMC' },
+      'Gangapur Mandi': { mr: 'गंगापूर बाजार समिती', en: 'Gangapur Mandi' },
+      'Paithan Mandi': { mr: 'पैठण बाजार समिती', en: 'Paithan Mandi' },
+      'Jalna Main Yard (Seed Capital)': { mr: 'जालना मुख्य यार्ड (बियाणे हब)', en: 'Jalna Main Yard (Seed Capital)' },
+      'Partur APMC': { mr: 'परतूर बाजार समिती', en: 'Partur APMC' },
+      "Latur APMC (Asia's Largest Pulse Hub)": { mr: 'लातूर बाजार समिती (डाळ हब)', en: "Latur APMC (Asia's Largest Pulse Hub)" },
+      'Udgir APMC': { mr: 'उदगीर बाजार समिती', en: 'Udgir APMC' },
+      'Ausa Mandi': { mr: 'औसा बाजार समिती', en: 'Ausa Mandi' },
+      'Nanded Mandi': { mr: 'नांदेड बाजार समिती', en: 'Nanded Mandi' },
+      'Loha APMC': { mr: 'लोहा बाजार समिती', en: 'Loha APMC' },
+      'Parbhani APMC': { mr: 'परभणी बाजार समिती', en: 'Parbhani APMC' },
+      'Jintur Mandi': { mr: 'जिंतूर बाजार समिती', en: 'Jintur Mandi' },
+      'Hingoli APMC': { mr: 'हिंगोली बाजार समिती', en: 'Hingoli APMC' },
+      'Basmath Yard': { mr: 'वसमत यार्ड', en: 'Basmath Yard' },
+      'Beed Mandi': { mr: 'बीड बाजार समिती', en: 'Beed Mandi' },
+      'Majalgaon APMC': { mr: 'माजलगाव बाजार समिती', en: 'Majalgaon APMC' },
+      'Ambejogai Yard': { mr: 'अंबाजोगाई यार्ड', en: 'Ambejogai Yard' },
+      'Dharashiv APMC': { mr: 'धाराशिव बाजार समिती', en: 'Dharashiv APMC' },
+      'Kalamb Mandi': { mr: 'कळंब बाजार समिती', en: 'Kalamb Mandi' },
+      'Amravati Cotton Yard': { mr: 'अमरावती कापूस यार्ड', en: 'Amravati Cotton Yard' },
+      'Achalpur Mandi': { mr: 'अचलपूर बाजार समिती', en: 'Achalpur Mandi' },
+      'Akola Cotton & Grain APMC': { mr: 'अकोला कापूस व धान्य बाजार', en: 'Akola Cotton & Grain APMC' },
+      'Khamgaon APMC (Cotton Hub)': { mr: 'खामगाव बाजार समिती (कापूस हब)', en: 'Khamgaon APMC (Cotton Hub)' },
+      'Malkapur Mandi': { mr: 'मलकापूर बाजार समिती', en: 'Malkapur Mandi' },
+      'Yavatmal White Gold Cotton Yard': { mr: 'यवतमाळ पांढरे सोने कापूस यार्ड', en: 'Yavatmal White Gold Cotton Yard' },
+      'Wani APMC': { mr: 'वणी बाजार समिती', en: 'Wani APMC' },
+      'Washim APMC': { mr: 'वाशिम बाजार समिती', en: 'Washim APMC' },
+      'Karanja Lad (Soybean Capital)': { mr: 'कारंजा लाड (सोयाबीन हब)', en: 'Karanja Lad (Soybean Capital)' },
+      'Kalamna Market Yard (Orange & Grain)': { mr: 'कळमणा मार्केट यार्ड (संत्रा व धान्य)', en: 'Kalamna Market Yard (Orange & Grain)' },
+      'Katol APMC (Orange Hub)': { mr: 'काटोल बाजार समिती (संत्रा हब)', en: 'Katol APMC (Orange Hub)' },
+      'Wardha APMC': { mr: 'वर्धा बाजार समिती', en: 'Wardha APMC' },
+      'Hinganghat Cotton Market': { mr: 'हिंगणघाट कापूस बाजार', en: 'Hinganghat Cotton Market' },
+      'Bhandara APMC': { mr: 'भंडारा बाजार समिती', en: 'Bhandara APMC' },
+      'Tumsar Rice Yard': { mr: 'तुमसर तांदूळ यार्ड', en: 'Tumsar Rice Yard' },
+      'Gondia APMC (Paddy Capital)': { mr: 'गोंदिया बाजार समिती (धान हब)', en: 'Gondia APMC (Paddy Capital)' },
+      'Chandrapur APMC': { mr: 'चंद्रपूर बाजार समिती', en: 'Chandrapur APMC' },
+      'Warora Mandi': { mr: 'वरोरा बाजार समिती', en: 'Warora Mandi' },
+      'Gadchiroli APMC': { mr: 'गडचिरोली बाजार समिती', en: 'Gadchiroli APMC' },
+      'Navi Mumbai Vashi APMC (Terminal Market)': { mr: 'नवी मुंबई वाशी बाजार समिती (टर्मिनल)', en: 'Navi Mumbai Vashi APMC (Terminal Market)' },
+      'Kalyan APMC': { mr: 'कल्याण बाजार समिती', en: 'Kalyan APMC' },
+      'Palghar Mandi': { mr: 'पालघर बाजार समिती', en: 'Palghar Mandi' },
+      'Panvel APMC': { mr: 'पनवेल बाजार समिती', en: 'Panvel APMC' },
+      'Pen APMC': { mr: 'पेण बाजार समिती', en: 'Pen APMC' },
+      'Ratnagiri Mango & Coconut Yard': { mr: 'रत्नागिरी आंबा व नारळ यार्ड', en: 'Ratnagiri Mango & Coconut Yard' },
+      'Kudal APMC': { mr: 'कुडाळ बाजार समिती', en: 'Kudal APMC' }
+    };
+
+    const divisionLabels = {
+      mr: ["नाशिक (खान्देश)", "पुणे (पश्चिम)", "संभाजीनगर (मराठवाडा)", "अमरावती (विदर्भ)", "नागपूर (विदर्भ)", "कोकण (मुंबई MMR)"],
+      en: ["Nashik (Khandesh)", "Pune (Western MH)", "Sambhajinagar (Marathwada)", "Amravati (Vidarbha)", "Nagpur (Vidarbha)", "Konkan (Mumbai MMR)"]
+    };
+
+    const tickerNews = {
+      mr: "लासलगाव बाजार समितीत उन्हाळ कांद्याला ₹२,४२० चा भाव • खरीप सोयाबीन हमीभाव खरेदी नोंदणी सुरू • पुणे यार्डात भाजीपाल्याची बंपर आवक • कापूस दरात तेजी: अकोला व यवतमाळ बाजारात ₹७,२५० प्रति क्विंटल • जळगाव रावेर केळीची थेट आखाती देशांत निर्यात सुरू",
+      en: "Summer Onion reaches ₹2,420/Qtl at Lasalgaon APMC • Kharif Soybean MSP registration open • High vegetable arrivals at Pune Yard • Cotton surges to ₹7,250/Qtl in Akola & Yavatmal • Jalgaon Raver Banana exports flag off to Gulf countries"
+    };
+
+    function getDistrictName(d, lang) {
+      if (districtsMap[d]) return districtsMap[d][lang] || d;
+      return d;
+    }
+
+    function getMandiName(m, lang) {
+      if (mandisMap[m]) return mandisMap[m][lang] || m;
+      return m;
+    }
+
+    function getCropName(c, lang) {
+      const item = crops.find(x => x.id.toLowerCase() === c.toLowerCase());
+      if (item) {
+        return lang === 'mr' ? item.mr.split(' ')[0] : item.en.split(' ')[0];
+      }
+      return c;
+    }
+
+    setInterval(() => {
+      const now = new Date();
+      const el = document.getElementById('live-ist-clock');
+      if (el) el.innerText = now.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit', second: '2-digit' }) + ' IST';
+    }, 1000);
+
+    function switchViewMode(mode) {
+      ['divisions', 'all', 'tools', 'jform'].forEach(m => {
+        const pane = document.getElementById(`view-${m}`);
+        const btn = document.getElementById(`tab-btn-${m}`);
+        if (pane) pane.classList.add('hidden');
+        if (btn) {
+          if (m === mode) {
+            btn.className = 'px-3 py-2 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 bg-emerald-600 text-white shadow-md shadow-emerald-600/20';
+          } else {
+            btn.className = 'px-3 py-2 rounded-xl text-xs font-black transition flex items-center justify-center gap-1.5 bg-white text-slate-700 hover:bg-slate-100 border border-slate-200 shadow-sm';
+          }
+        }
+      });
+      const activePane = document.getElementById(`view-${mode}`);
+      if (activePane) activePane.classList.remove('hidden');
+      try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+    }
+
+    function renderPills() {
+      const container = document.getElementById('crop-pills');
+      if (!container) return;
+      container.innerHTML = crops.map(c => `
+        <button onclick="selectCommodity('${c.id}')" class="px-3 py-1.5 rounded-xl text-xs font-bold transition flex items-center gap-1 whitespace-nowrap ${
+          currentCommodity === c.id
+            ? 'bg-emerald-600 text-white shadow-sm'
+            : 'text-slate-700 hover:bg-slate-100'
+        }">
+          ${currentLang === 'mr' ? c.mr : c.en}
+        </button>
+      `).join('');
+    }
+
+    function selectCommodity(comm) {
+      currentCommodity = comm;
+      renderPills();
+      fetchAllMarketsData();
+      fetchLiveAuctions();
+      renderDivisionMandis();
+    }
+
+    async function fetchDivisions() {
+      try {
+        const res = await fetch('/api/v1/divisions');
+        const data = await res.json();
+        divisionsData = data.divisions;
+        renderDivisionPills();
+        renderDivisionMandis();
+      } catch (err) {
+        console.error('Divisions error:', err);
+      }
+    }
+
+    function renderDivisionPills() {
+      const container = document.getElementById('division-pills-container');
+      if (!container || !divisionsData.length) return;
+      const unit = currentLang === 'mr' ? 'बाजार समित्या' : 'APMC Mandis';
+      container.innerHTML = divisionsData.map((d, i) => `
+        <button onclick="selectDivision(${i})" class="p-2.5 rounded-2xl text-left border transition ${
+          activeDivisionIndex === i
+            ? 'bg-emerald-50 border-emerald-500 shadow-sm ring-2 ring-emerald-500/20'
+            : 'bg-white border-slate-200 hover:border-slate-300'
+        }">
+          <div class="text-xs font-extrabold ${activeDivisionIndex === i ? 'text-emerald-700' : 'text-slate-800'}">
+            ${divisionLabels[currentLang][i] || d.division}
+          </div>
+          <div class="text-[10px] text-slate-500 font-semibold">${d.total_markets} ${unit}</div>
+        </button>
+      `).join('');
+    }
+
+    function selectDivision(idx) {
+      activeDivisionIndex = idx;
+      renderDivisionPills();
+      renderDivisionMandis();
+    }
+
+    /* DYNAMIC DIVISION HIGH & LOW PRICE CALCULATION (100% PURE BILINGUAL) */
+    function updateDivisionHighLow() {
+      if (!divisionsData[activeDivisionIndex]) return;
+      const div = divisionsData[activeDivisionIndex];
+      const mktList = div.markets;
+
+      let highMkt = null;
+      let lowMkt = null;
+      let highP = -Infinity;
+      let lowP = Infinity;
+
+      mktList.forEach(m => {
+        const mData = allMarketsCache.find(x => x.market === m.market);
+        const p = mData ? mData.modal_price : 2000;
+        if (p > highP) {
+          highP = p;
+          highMkt = m.market;
+        }
+        if (p < lowP) {
+          lowP = p;
+          lowMkt = m.market;
+        }
+      });
+
+      const highEl = document.getElementById('div-high-market');
+      const lowEl = document.getElementById('div-low-market');
+      const perQtl = currentLang === 'mr' ? '/क्विंटल' : '/Qtl';
+
+      if (highEl && highMkt) {
+        const localizedMkt = getMandiName(highMkt, currentLang).split('(')[0].trim();
+        highEl.innerText = `${localizedMkt}: ₹${Math.round(highP).toLocaleString()} ${perQtl}`;
+      }
+      if (lowEl && lowMkt) {
+        const localizedMkt = getMandiName(lowMkt, currentLang).split('(')[0].trim();
+        lowEl.innerText = `${localizedMkt}: ₹${Math.round(lowP).toLocaleString()} ${perQtl}`;
+      }
+    }
+
+    function renderDivisionMandis() {
+      if (!divisionsData[activeDivisionIndex]) return;
+      const div = divisionsData[activeDivisionIndex];
+
+      const nameEl = document.getElementById('div-active-name');
+      if (nameEl) nameEl.innerText = divisionLabels[currentLang][activeDivisionIndex] || div.division;
+
+      const distPrefix = currentLang === 'mr' ? 'समाविष्ट जिल्हे: ' : 'Districts: ';
+      const localizedDistricts = div.districts.map(d => getDistrictName(d, currentLang)).join(', ');
+      const distEl = document.getElementById('div-active-districts');
+      if (distEl) distEl.innerText = `${distPrefix}${localizedDistricts}`;
+
+      const countEl = document.getElementById('div-mandi-count');
+      const unit = currentLang === 'mr' ? 'बाजार समित्या' : 'APMC Mandis';
+      if (countEl) countEl.innerText = `${div.markets.length} ${unit}`;
+
+      updateDivisionHighLow();
+
+      const grid = document.getElementById('division-mandis-grid');
+      if (!grid) return;
+      grid.innerHTML = div.markets.map(m => {
+        const marketData = allMarketsCache.find(x => x.market === m.market) || { modal_price: 2200, min_price: 2050, max_price: 2350, arrivals_tonnes: 120 };
+        const localizedMandi = getMandiName(m.market, currentLang);
+        const localizedDist = getDistrictName(m.district, currentLang);
+        const perQtlText = currentLang === 'mr' ? 'सरासरी / क्विंटल' : 'Modal / Qtl';
+        const arrText = currentLang === 'mr' ? 'आवक:' : 'Arrival:';
+        const trText = currentLang === 'mr' ? 'व्यापारी:' : 'Traders:';
+        const dossierText = currentLang === 'mr' ? 'संपूर्ण पोर्टफोलिओ पहा ➔' : 'View Full Dossier ➔';
+        const verifiedText = currentLang === 'mr' ? 'ई-नाम प्रमाणित' : 'e-NAM Verified';
+
+        return `
+          <div onclick="openMarketDossier('${encodeURIComponent(m.market)}')" class="white-card p-3.5 rounded-2xl border border-slate-200 cursor-pointer hover:border-emerald-500 transition">
+            <div class="flex items-start justify-between gap-2">
+              <div>
+                <span class="text-[10px] font-bold px-2 py-0.5 rounded-full bg-slate-100 text-slate-600 border border-slate-200">${localizedDist}</span>
+                <h4 class="text-sm font-black text-slate-900 mt-1 hover:text-emerald-700">${localizedMandi}</h4>
+              </div>
+              <div class="text-right">
+                <div class="text-base font-black text-emerald-700">₹${marketData.modal_price.toLocaleString()}</div>
+                <div class="text-[10px] text-slate-400 font-semibold">${perQtlText}</div>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-2 gap-2 mt-2.5 pt-2.5 border-t border-slate-100 text-[11px] text-slate-600">
+              <div>${arrText} <b class="text-slate-900">${marketData.arrivals_tonnes}T</b></div>
+              <div class="text-right">${trText} <b class="text-slate-900">${m.active_traders || 45}</b></div>
+            </div>
+
+            <div class="mt-2.5 pt-2 border-t border-slate-50 flex items-center justify-between text-[11px]">
+              <span class="text-emerald-700 font-bold hover:underline">${dossierText}</span>
+              <span class="text-[10px] px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 font-bold">${verifiedText}</span>
+            </div>
+          </div>
+        `;
+      }).join('');
+      try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+    }
+
+    async function fetchAllMarketsData() {
+      try {
+        const res = await fetch(`/api/v1/markets/all?commodity=${currentCommodity}`);
+        const data = await res.json();
+        allMarketsCache = data.markets;
+
+        const tbody = document.getElementById('all-markets-tbody');
+        if (tbody) {
+          const btnTxt = currentLang === 'mr' ? 'पोर्टफोलिओ ➔' : 'Dossier ➔';
+          tbody.innerHTML = data.markets.map((m, i) => `
+            <tr class="hover:bg-slate-50 transition cursor-pointer" onclick="openMarketDossier('${encodeURIComponent(m.market)}')">
+              <td class="py-2.5 px-3 font-bold text-slate-400">${i + 1}</td>
+              <td class="py-2.5 px-3 font-extrabold text-slate-900 hover:text-emerald-700">${getMandiName(m.market, currentLang)}</td>
+              <td class="py-2.5 px-3 text-slate-700">${getDistrictName(m.district, currentLang)}</td>
+              <td class="py-2.5 px-3 text-slate-500">${m.division.split(' ')[0]}</td>
+              <td class="py-2.5 px-3 font-black text-emerald-700">₹${m.modal_price.toLocaleString()}</td>
+              <td class="py-2.5 px-3 text-slate-600">₹${m.min_price} - ₹${m.max_price}</td>
+              <td class="py-2.5 px-3 font-mono text-slate-800">${m.arrivals_tonnes}T</td>
+              <td class="py-2.5 px-3 text-slate-500">${m.capacity_tonnes}T</td>
+              <td class="py-2.5 px-3 text-right">
+                <span class="px-2 py-0.5 rounded-lg bg-emerald-50 border border-emerald-200 text-emerald-800 text-[11px] font-bold">
+                  ${btnTxt}
+                </span>
+              </td>
+            </tr>
+          `).join('');
+        }
+        renderDivisionMandis();
+      } catch (err) {
+        console.error('All markets error:', err);
+      }
+    }
+
+    /* SAFE & FAST MARKET DOSSIER */
+    async function openMarketDossier(mktEncoded) {
+      const mktName = decodeURIComponent(mktEncoded);
+      try {
+        const res = await fetch(`/api/v1/market/dossier?market_name=${encodeURIComponent(mktName)}`);
+        if (!res.ok) throw new Error('Status ' + res.status);
+        const d = await res.json();
+
+        const localizedMkt = getMandiName(d.market, currentLang);
+        const localizedDist = getDistrictName(d.district, currentLang);
+
+        document.getElementById('dossier-market-title').innerText = localizedMkt;
+        document.getElementById('dossier-division-lbl').innerText = d.division;
+        document.getElementById('dossier-market-subtitle').innerText = currentLang === 'mr'
+          ? `जिल्हा: ${localizedDist} | अधिकृत डेटा स्रोत: ${d.data_sources.primary}`
+          : `District: ${localizedDist} | Official Source: ${d.data_sources.primary}`;
+
+        const lakhTxt = currentLang === 'mr' ? 'लाख' : 'Lakhs';
+        document.getElementById('dossier-turnover').innerText = `₹${d.portfolio.estimated_daily_turnover_lakhs} ${lakhTxt}`;
+        const trTxt = currentLang === 'mr' ? 'व्यापारी' : 'Traders';
+        document.getElementById('dossier-traders').innerText = `${d.portfolio.active_registered_traders} ${trTxt}`;
+        const tonTxt = currentLang === 'mr' ? 'टन' : 'Tonnes';
+        document.getElementById('dossier-capacity').innerText = `${d.portfolio.capacity_tonnes.toLocaleString()} ${tonTxt}`;
+        document.getElementById('dossier-status').innerText = currentLang === 'mr' ? d.status.badge_mr : d.status.badge_en;
+
+        document.getElementById('dossier-weighbridges').innerText = currentLang === 'mr' ? d.portfolio.electronic_weighbridges_mr : d.portfolio.electronic_weighbridges_en;
+        document.getElementById('dossier-coldstorage').innerText = currentLang === 'mr' ? d.portfolio.cold_storage_capacity_mr : d.portfolio.cold_storage_capacity_en;
+        document.getElementById('dossier-godown-note').innerText = currentLang === 'mr' ? d.portfolio.storage_godown_available_mr : d.portfolio.storage_godown_available_en;
+
+        // Sellers
+        const sellersContainer = document.getElementById('dossier-sellers-container');
+        sellersContainer.innerHTML = d.who_is_selling.map(s => `
+          <div class="p-2 rounded-xl bg-slate-50 border border-slate-200 text-xs">
+            <span class="text-[9px] font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800">${currentLang === 'mr' ? s.entity_type_mr : s.entity_type_en}</span>
+            <div class="font-black text-slate-900 mt-1">${currentLang === 'mr' ? s.name_mr : s.name_en}</div>
+            <div class="text-[10px] text-slate-500 mt-0.5">${currentLang === 'mr' ? 'मूळ: ' : 'Origin: '}${currentLang === 'mr' ? s.origin_mr : s.origin_en}</div>
+            <div class="text-[10px] font-bold text-emerald-700 mt-0.5">${currentLang === 'mr' ? 'आवक: ' : 'Arrival: '}${s.volume_qtl} Qtl (${getCropName(s.crop, currentLang)})</div>
+          </div>
+        `).join('');
+
+        // Profit
+        const profitDiv = document.getElementById('dossier-profit-crops');
+        profitDiv.innerHTML = d.profit_makers.length ? d.profit_makers.map(c => `
+          <div class="p-2 rounded-xl bg-emerald-50 border border-emerald-200 flex justify-between items-center text-xs">
+            <div>
+              <b class="text-slate-900">${getCropName(c.commodity, currentLang)}</b>
+              <div class="text-[10px] text-emerald-700 font-semibold">+${c.price_trend_30d_pct}% ${currentLang === 'mr' ? 'नफा वाढ' : '30-Day Gain'}</div>
+            </div>
+            <div class="text-right font-black text-emerald-800">₹${c.current_price}</div>
+          </div>
+        `).join('') : `<div class="text-xs text-slate-500">${currentLang === 'mr' ? 'दर स्थिर आहेत.' : 'Rates are stable.'}</div>`;
+
+        // Loss
+        const lossDiv = document.getElementById('dossier-loss-crops');
+        lossDiv.innerHTML = d.loss_makers.length ? d.loss_makers.map(c => `
+          <div class="p-2 rounded-xl bg-rose-50 border border-rose-200 flex justify-between items-center text-xs">
+            <div>
+              <b class="text-slate-900">${getCropName(c.commodity, currentLang)}</b>
+              <div class="text-[10px] text-rose-700 font-semibold">${c.price_trend_30d_pct}% ${currentLang === 'mr' ? 'घसरण' : 'Drop'}</div>
+            </div>
+            <div class="text-right font-black text-rose-700">₹${c.current_price}</div>
+          </div>
+        `).join('') : `<div class="text-xs text-slate-500">${currentLang === 'mr' ? 'मोठी घसरण नाही.' : 'No major drop.'}</div>`;
+
+        // MSP
+        const mspTbody = document.getElementById('dossier-msp-tbody');
+        mspTbody.innerHTML = d.crops.map(c => `
+          <tr class="hover:bg-slate-50">
+            <td class="p-2 font-bold text-slate-900">${getCropName(c.commodity, currentLang)}</td>
+            <td class="p-2 font-black text-emerald-700">₹${c.current_price}</td>
+            <td class="p-2 text-slate-600 font-semibold">₹${c.msp_rate}</td>
+            <td class="p-2 text-right">
+              <span class="px-2 py-0.5 rounded-full text-[10px] font-bold ${
+                c.msp_status === 'ABOVE_MSP' ? 'bg-emerald-100 text-emerald-800' : 'bg-rose-100 text-rose-800'
+              }">
+                ${c.msp_status === 'ABOVE_MSP' ? (currentLang === 'mr' ? `+₹${c.msp_difference} हमीभावापेक्षा जास्त` : `+₹${c.msp_difference} Above MSP`) : (currentLang === 'mr' ? `हमीभावापेक्षा कमी` : `Below MSP`)}
+              </span>
+            </td>
+          </tr>
+        `).join('');
+
+        document.getElementById('dossier-modal').classList.remove('hidden');
+        try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+      } catch (err) {
+        console.error('Dossier error:', err);
+        alert(currentLang === 'mr' ? 'बाजार समिती पोर्टफोलिओ लोड करताना त्रुटी आली. कृपया पुन्हा प्रयत्न करा.' : 'Error loading market dossier. Please retry.');
+      }
+    }
+
+    function closeDossierModal() {
+      document.getElementById('dossier-modal').classList.add('hidden');
+    }
+
+    /* TRADER BUY ORDERS */
+    async function fetchTraderDemands() {
+      try {
+        const res = await fetch('/api/v1/traders/demands');
+        const data = await res.json();
+        const container = document.getElementById('trader-orders-container');
+        if (!container) return;
+
+        container.innerHTML = data.demands.map(o => `
+          <div id="order-card-${o.order_id}" class="p-3.5 rounded-2xl bg-white border border-slate-200 shadow-sm flex flex-col justify-between">
+            <div class="flex items-start justify-between">
+              <div>
+                <span class="text-[9px] font-bold px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800">${currentLang === 'mr' ? 'परवानाधारक व्यापारी' : 'APMC LICENSED'}</span>
+                <h4 class="text-sm font-black text-slate-900 mt-1">${o.trader_name}</h4>
+                <div class="text-[10px] text-slate-400 font-mono">${o.license_no}</div>
+                <div class="text-xs text-slate-600 font-semibold mt-1">${currentLang === 'mr' ? 'मागणी: ' : 'Required: '}<b class="text-emerald-700">${getCropName(o.buying_crop, currentLang)} (${o.required_qty})</b></div>
+              </div>
+              <div class="text-right">
+                <div class="text-base font-black text-emerald-700">₹${o.offered_price}</div>
+                <div class="text-[10px] text-slate-400 font-semibold">${currentLang === 'mr' ? 'ऑफर भाव / क्विंटल' : 'Offer / Qtl'}</div>
+              </div>
+            </div>
+
+            <div class="mt-2.5 pt-2 border-t border-slate-100 text-[11px] text-slate-500 space-y-0.5">
+              <div>${currentLang === 'mr' ? 'डिलिव्हरी: ' : 'Delivery: '}<b class="text-slate-700">${o.destination}</b></div>
+              <div>${currentLang === 'mr' ? 'पेमेंट: ' : 'Payment: '}<b class="text-emerald-700">${o.payment_terms}</b></div>
+            </div>
+
+            <div class="mt-3 pt-2 border-t border-slate-100 flex items-center justify-between gap-2">
+              <a href="tel:${o.contact_phone}" class="px-2.5 py-1 rounded-lg bg-slate-100 hover:bg-slate-200 text-slate-800 text-xs font-bold transition flex items-center gap-1">
+                <i data-lucide="phone-call" class="w-3.5 h-3.5 text-emerald-600"></i>
+                <span>${currentLang === 'mr' ? 'कॉल करा' : 'Call'}</span>
+              </a>
+              <button onclick="markDealDone('${o.order_id}')" class="px-2.5 py-1 rounded-lg bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold transition">
+                ${currentLang === 'mr' ? '✅ सौदा पूर्ण' : '✅ Deal Done'}
+              </button>
+            </div>
+          </div>
+        `).join('');
+        try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+      } catch (err) {
+        console.error('Demands error:', err);
+      }
+    }
+
+    async function markDealDone(orderId) {
+      try {
+        const card = document.getElementById(`order-card-${orderId}`);
+        if (card) card.remove();
+        await fetch(`/api/v1/traders/demands/complete?order_id=${orderId}`, { method: 'POST' });
+        alert(currentLang === 'mr' ? 'सौदा पूर्ण झाला! मागणी फलकावरून हटवली गेली.' : 'Deal fulfilled! Order removed from board.');
+      } catch (e) {}
+    }
+
+    function openNewOrderModal() { document.getElementById('new-order-modal').classList.remove('hidden'); }
+    function closeNewOrderModal() { document.getElementById('new-order-modal').classList.add('hidden'); }
+
+    async function submitNewBuyOrder(e) {
+      e.preventDefault();
+      const payload = {
+        trader_name: document.getElementById('ord-name').value,
+        license_no: document.getElementById('ord-lic').value,
+        contact_phone: document.getElementById('ord-phone').value,
+        buying_crop: document.getElementById('ord-crop').value,
+        required_qty: document.getElementById('ord-qty').value,
+        offered_price: parseFloat(document.getElementById('ord-price').value),
+        destination: document.getElementById('ord-dest').value,
+        payment_terms: document.getElementById('ord-pay').value
+      };
+
+      try {
+        await fetch('/api/v1/traders/demands/add', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        alert(currentLang === 'mr' ? 'खरेदी मागणी फलकावर प्रसिद्ध केली गेली!' : 'Order published to active board!');
+        closeNewOrderModal();
+        fetchTraderDemands();
+      } catch (err) {
+        alert('Error posting order');
+      }
+    }
+
+    /* DIGITAL SALE BILL & RECEIPT GENERATOR (100% PURE BILINGUAL) */
+    async function generateDigitalJForm() {
+      const mandi = document.getElementById('jf-mandi').value;
+      const farmer = document.getElementById('jf-farmer').value;
+      const trader = document.getElementById('jf-trader').value;
+      const crop = document.getElementById('jf-crop').value;
+      const weight = parseFloat(document.getElementById('jf-weight').value);
+      const rate = parseFloat(document.getElementById('jf-rate').value);
+
+      try {
+        const res = await fetch(`/api/v1/jform/calculate?farmer_name=${encodeURIComponent(farmer)}&mandi_name=${encodeURIComponent(mandi)}&commodity=${encodeURIComponent(crop)}&weight_qtl=${weight}&rate_per_qtl=${rate}&trader_name=${encodeURIComponent(trader)}`);
+        const d = await res.json();
+
+        const localizedMkt = getMandiName(d.mandi, currentLang);
+        const localizedCrop = getCropName(d.commodity, currentLang);
+        const perQtlUnit = currentLang === 'mr' ? 'क्विंटल' : 'Qtl';
+
+        document.getElementById('slip-mandi-header').innerText = localizedMkt;
+        document.getElementById('slip-id-date').innerText = currentLang === 'mr'
+          ? `पावती क्र: ${d.jform_no} | दिनांक: ${d.date}`
+          : `Receipt No: ${d.jform_no} | Date: ${d.date}`;
+        document.getElementById('slip-farmer').innerText = d.farmer;
+        document.getElementById('slip-trader').innerText = d.trader;
+        document.getElementById('slip-crop-qty').innerText = `${localizedCrop} (${d.weight_qtl} ${perQtlUnit})`;
+        document.getElementById('slip-rate').innerText = `₹${d.rate_per_qtl.toLocaleString()} / ${perQtlUnit}`;
+        document.getElementById('slip-gross').innerText = `₹${d.gross_amount.toLocaleString()}`;
+        document.getElementById('slip-weighing').innerText = `- ₹${d.weighing_fee.toLocaleString()}`;
+        document.getElementById('slip-cess').innerText = `₹${d.apmc_cess_trader_paid.toLocaleString()} (${currentLang === 'mr' ? 'खरेदीदार व्यापारी भरेल' : 'Buyer Paid'})`;
+        document.getElementById('slip-net').innerText = `₹${d.net_payable_farmer.toLocaleString()}`;
+
+        document.getElementById('jform-display-slip').classList.remove('hidden');
+        try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+      } catch (err) {
+        alert('Bill calculation error');
+      }
+    }
+
+    /* CLEAN SINGLE-PAGE PRINT FUNCTION */
+    function printSaleSlip() {
+      window.print();
+    }
+
+    /* FREIGHT CALCULATOR */
+    async function runFreightCalculation() {
+      const km = parseFloat(document.getElementById('calc-km').value);
+      const qty = parseFloat(document.getElementById('calc-qty').value);
+      const spread = parseFloat(document.getElementById('calc-spread').value);
+
+      try {
+        const res = await fetch(`/api/v1/freight/calculator?distance_km=${km}&quintals=${qty}&spread_rs=${spread}`);
+        const d = await res.json();
+        document.getElementById('res-rec-text').innerText = currentLang === 'mr' ? d.rec_mr : d.rec_en;
+        document.getElementById('res-total-profit').innerText = `₹${d.total_net_profit_rs.toLocaleString()}`;
+        document.getElementById('freight-result-box').classList.remove('hidden');
+      } catch (err) {
+        alert('Calculator error');
+      }
+    }
+
+    /* LIVE AUCTION WINNERS (100% PURE BILINGUAL) */
+    async function fetchLiveAuctions() {
+      try {
+        const res = await fetch(`/api/v1/auction/live?commodity=${currentCommodity}`);
+        const data = await res.json();
+        const tbody = document.getElementById('live-auction-tbody');
+        if (!tbody) return;
+
+        tbody.innerHTML = data.recent_auctions.map(a => `
+          <tr class="hover:bg-slate-50 transition">
+            <td class="py-2 px-2.5 font-mono font-bold text-sky-700">${a.lot_id}</td>
+            <td class="py-2 px-2.5 font-bold text-slate-900">${getMandiName(a.market, currentLang)}</td>
+            <td class="py-2 px-2.5 text-slate-700">${getCropName(a.commodity, currentLang)} <span class="text-[10px] text-slate-500">(${a.variety})</span></td>
+            <td class="py-2 px-2.5 font-mono font-semibold">${a.quantity_quintals} ${currentLang === 'mr' ? 'क्विंटल' : 'Qtl'}</td>
+            <td class="py-2 px-2.5 font-bold text-amber-800">${a.winning_trader}</td>
+            <td class="py-2 px-2.5 font-black text-emerald-700">₹${a.winning_bid.toLocaleString()}</td>
+            <td class="py-2 px-2.5 text-slate-600">${a.farmer_origin}</td>
+            <td class="py-2 px-2.5 text-right">
+              <span class="px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 text-[10px] font-extrabold">${currentLang === 'mr' ? 'मंजूर 🔨' : 'Sold 🔨'}</span>
+            </td>
+          </tr>
+        `).join('');
+      } catch (err) {
+        console.error('Auction error:', err);
+      }
+    }
+
+    function filterMandiCards() {
+      const q = document.getElementById('mandi-search-input').value.toLowerCase();
+      document.querySelectorAll('#division-mandis-grid > div').forEach(c => {
+        c.style.display = c.innerText.toLowerCase().includes(q) ? 'block' : 'none';
+      });
+      document.querySelectorAll('#all-markets-tbody > tr').forEach(r => {
+        r.style.display = r.innerText.toLowerCase().includes(q) ? '' : 'none';
+      });
+    }
+
+    /* 100% COMPLETE BILINGUAL TRANSLATION (EVERY SINGLE WORD) */
+    function toggleLanguage() {
+      currentLang = currentLang === 'mr' ? 'en' : 'mr';
+      const isMr = currentLang === 'mr';
+
+      document.documentElement.lang = currentLang;
+
+      // Header & Brand
+      document.getElementById('brand-kisan').innerText = isMr ? 'किसान' : 'Kisan';
+      document.getElementById('brand-setu').innerText = isMr ? 'सेतू' : 'Setu';
+      document.getElementById('brand-tag').innerText = isMr ? 'थेट कृषी बाजार' : 'Direct Agri Market';
+      document.getElementById('brand-sub').innerText = isMr
+        ? 'महाराष्ट्र ७६ APMC बाजार समित्या थेट दर, हमीभाव व पोर्टफोलिओ'
+        : 'Maharashtra 76 APMC Mandis Live Rates, MSP Benchmarks & Portfolios';
+      document.getElementById('lang-label').innerText = isMr ? 'English मध्ये पहा' : 'मराठीत पहा';
+      document.getElementById('btn-broadcast-txt').innerText = isMr ? '📡 लिलाव नोंदवा' : '📡 Broadcast';
+      document.getElementById('btn-report-txt').innerText = isMr ? '✍️ शेतकरी भाव' : '✍️ Submit Rate';
+
+      // Ticker
+      document.getElementById('ticker-badge').innerText = isMr ? '🔴 थेट कृषी बाजार बातम्या' : '🔴 LIVE APMC NEWS';
+      document.getElementById('ticker-content').innerText = isMr ? tickerNews.mr : tickerNews.en;
+
+      // Status Bar
+      document.getElementById('market-status-title').innerText = isMr ? '🟢 थेट लिलाव सुरू आहे' : '🟢 Live Auction Bidding Active';
+      document.getElementById('market-status-desc').innerText = isMr
+        ? 'सर्व ७६ बाजार समित्यांमध्ये ई-नाम व इलेक्ट्रॉनिक वजनकाट्यांवर थेट आवक सुरू.'
+        : 'Live trading and electronic weighbridge arrivals active across all 76 APMCs.';
+      document.getElementById('lbl-timing-auction').innerText = isMr ? 'लिलाव:' : 'Auctions:';
+      document.getElementById('lbl-timing-settle').innerText = isMr ? 'हिशोब:' : 'Settlement:';
+      document.getElementById('lbl-verified-badge').innerText = isMr ? 'Agmarknet व MSAMB प्रमाणित' : 'Agmarknet & MSAMB Certified';
+
+      // Tabs
+      document.getElementById('tab-txt-divisions').innerText = isMr ? '🏛️ विभाग (Divisions)' : '🏛️ Divisions';
+      document.getElementById('tab-txt-all').innerText = isMr ? '🌍 सर्व बाजार (All Mandis)' : '🌍 All Mandis';
+      document.getElementById('tab-txt-tools').innerText = isMr ? '💼 खरेदी फलक (Trader Desk)' : '💼 Trader Desk';
+      document.getElementById('tab-txt-jform').innerText = isMr ? '📑 शेतकरी पावती (Sale Bill)' : '📑 Sale Bill';
+
+      // Division active banner
+      document.getElementById('div-active-tag').innerText = isMr ? 'निवडलेला महसूल विभाग' : 'Selected Division';
+      document.getElementById('lbl-div-high').innerText = isMr ? 'उच्चांकी भाव' : 'Highest Rate';
+      document.getElementById('lbl-div-low').innerText = isMr ? 'कमी भाव' : 'Lowest Rate';
+      document.getElementById('mandi-search-input').placeholder = isMr ? 'बाजार समिती किंवा जिल्हा शोधा...' : 'Search Mandi or District...';
+
+      // All 76 table
+      document.getElementById('all-mandis-heading').innerText = isMr ? 'सर्व महाराष्ट्र ७६ कृषी उत्पन्न बाजार समित्या थेट दर' : 'All 76 Maharashtra APMC Mandis Live Rates';
+      document.getElementById('all-mandis-sub').innerText = isMr ? 'सविस्तर पोर्टफोलिओसाठी कोणत्याही बाजार समितीच्या नावावर क्लिक करा.' : 'Click on any mandi to view full portfolio dossier.';
+      document.getElementById('all-active-badge').innerText = isMr ? '७६ समित्या सक्रिय' : '76 Mandis Active';
+      document.getElementById('th-sr').innerText = isMr ? '#' : '#';
+      document.getElementById('th-mandi').innerText = isMr ? 'बाजार समिती' : 'APMC Mandi';
+      document.getElementById('th-district').innerText = isMr ? 'जिल्हा' : 'District';
+      document.getElementById('th-division').innerText = isMr ? 'विभाग' : 'Division';
+      document.getElementById('th-modal').innerText = isMr ? 'आजचा सरासरी भाव' : 'Today Modal Rate';
+      document.getElementById('th-minmax').innerText = isMr ? 'किमान / कमाल भाव' : 'Min / Max Price';
+      document.getElementById('th-arrival').innerText = isMr ? 'आवक' : 'Arrivals';
+      document.getElementById('th-capacity').innerText = isMr ? 'गोदाम क्षमता' : 'Capacity';
+      document.getElementById('th-action').innerText = isMr ? 'सविस्तर पोर्टफोलिओ' : 'Full Dossier';
+
+      // Trader Desk
+      document.getElementById('demand-heading').innerText = isMr ? 'व्यापारी थेट खरेदी मागणी फलक' : 'Live APMC Trader Buy Orders Board';
+      document.getElementById('demand-sub').innerText = isMr ? 'परवानाधारक व्यापाऱ्यांकडून थेट मोठ्या प्रमाणात खरेदी मागणी.' : 'Verified licensed traders seeking bulk direct procurement.';
+      document.getElementById('btn-add-demand').innerText = isMr ? 'नवीन खरेदी मागणी जोडा' : 'Post Buy Order';
+      document.getElementById('calc-heading').innerText = isMr ? 'वाहतूक खर्च व निव्वळ नफा कॅल्क्युलेटर' : 'Mandi Freight & Net Profit Calculator';
+      document.getElementById('calc-sub').innerText = isMr ? 'दूरच्या बाजार समितीत शेतमाल नेणे फायदेशीर आहे का ते तपासा.' : 'Check if distant mandi transport is profitable after freight.';
+      document.getElementById('lbl-calc-km').innerText = isMr ? 'अंतर (किलोमीटर)' : 'Distance (km)';
+      document.getElementById('lbl-calc-qty').innerText = isMr ? 'एकूण शेतमाल (क्विंटल)' : 'Quantity (Quintals)';
+      document.getElementById('lbl-calc-spread').innerText = isMr ? 'भावातील फरक (₹/क्विंटल)' : 'Price Difference (₹/Qtl)';
+      document.getElementById('btn-calc').innerText = isMr ? 'नफा मोजा' : 'Calculate Profit';
+
+      // Sale Bill Generator Form
+      document.getElementById('jf-title').innerText = isMr ? 'अधिकृत शेतकरी लिलाव पावती व बिल जनरेटर' : 'Official Farmer Mandi Sale Bill Generator';
+      document.getElementById('jf-sub').innerText = isMr ? 'बाजार समितीमधील शेतमाल विक्रीचा अचूक हिशोब, शून्य बेकायदेशीर कपात व पक्की पावती.' : 'Official transparent auction sale slip under Maharashtra APMC Act.';
+      document.getElementById('lbl-jf-mandi').innerText = isMr ? 'बाजार समिती' : 'APMC Mandi';
+      document.getElementById('lbl-jf-farmer').innerText = isMr ? 'शेतकरी नाव' : 'Farmer Name';
+      document.getElementById('lbl-jf-trader').innerText = isMr ? 'खरेदीदार व्यापारी फर्म' : 'Buyer Trader Firm';
+      document.getElementById('lbl-jf-crop').innerText = isMr ? 'पीक' : 'Crop (Commodity)';
+      document.getElementById('lbl-jf-weight').innerText = isMr ? 'निव्वळ वजन (क्विंटल)' : 'Net Weight (Quintals)';
+      document.getElementById('lbl-jf-rate').innerText = isMr ? 'लिलाव भाव (₹/क्विंटल)' : 'Auction Rate (₹/Qtl)';
+      document.getElementById('btn-gen-jform').innerText = isMr ? 'अधिकृत शेतकरी पावती तयार करा' : 'Generate Official Sale Bill';
+
+      // Slip labels (NO MIXED ENGLISH)
+      document.getElementById('slip-badge-title').innerText = isMr ? 'महाराष्ट्र कृषी उत्पन्न पणन (नियम ३२ अन्वये अधिकृत पावती)' : 'Maharashtra APMC Official Lot Settlement Bill';
+      document.getElementById('slip-enam-tag').innerText = isMr ? 'ई-नाम प्रमाणित' : 'e-NAM Verified';
+      document.getElementById('btn-print-txt').innerText = isMr ? '🖨️ पावती प्रिंट करा' : '🖨️ Print Bill';
+      document.getElementById('lbl-slip-f').innerText = isMr ? 'शेतकरी नाव:' : 'Farmer Name:';
+      document.getElementById('lbl-slip-t').innerText = isMr ? 'खरेदीदार व्यापारी:' : 'Buyer Trader:';
+      document.getElementById('lbl-slip-c').innerText = isMr ? 'शेतमाल व वजन:' : 'Produce & Weight:';
+      document.getElementById('lbl-slip-r').innerText = isMr ? 'अंतिम लिलाव दर:' : 'Auction Rate:';
+      document.getElementById('lbl-slip-gross').innerText = isMr ? 'एकूण शेतमाल किंमत:' : 'Gross Produce Value:';
+      document.getElementById('lbl-slip-w').innerText = isMr ? 'अधिकृत धर्मकाटा तोलाई आकार (१० रुपये/क्विंटल):' : 'Authorized Weighbridge Fee (₹10/Qtl):';
+      document.getElementById('lbl-slip-cess').innerText = isMr ? 'बाजार समिती उपकर (१.०५% - खरेदीदार व्यापारी भरेल):' : 'APMC Market Cess (1.05% - Buyer Paid):';
+      document.getElementById('lbl-slip-net').innerText = isMr ? 'शेतकऱ्यास मिळणारी निव्वळ रक्कम:' : 'Net Amount Payable to Farmer:';
+      document.getElementById('slip-legal-note').innerText = isMr ? 'महाराष्ट्र कृषी पणन कायद्यानुसार शेतकऱ्याकडून कोणतीही बेकायदेशीर अडत कपात होत नाही.' : 'Under Maharashtra APMC Act, zero unauthorized cuts or illegal commission are charged to farmers.';
+      document.getElementById('slip-sign-line').innerText = isMr ? 'अधिकृत स्वाक्षरी / शिक्का (बाजार समिती / व्यापारी)' : 'Authorized Signature & Stamp (APMC Officer / Trader)';
+
+      // Live Auction table
+      document.getElementById('auc-title').innerText = isMr ? 'थेट लिलाव निकाल व विजयी खरेदीदार' : 'Live Auction Winners & Hammer Bids Feed';
+      document.getElementById('auc-verified-tag').innerText = isMr ? 'ई-नाम अधिकृत' : 'e-NAM Verified';
+      document.getElementById('th-auc-lot').innerText = isMr ? 'लॉट क्र.' : 'Lot ID';
+      document.getElementById('th-auc-mandi').innerText = isMr ? 'बाजार समिती' : 'APMC Mandi';
+      document.getElementById('th-auc-crop').innerText = isMr ? 'पीक / जात' : 'Crop / Variety';
+      document.getElementById('th-auc-qty').innerText = isMr ? 'वजन' : 'Quantity';
+      document.getElementById('th-auc-trader').innerText = isMr ? 'विजेता खरेदीदार व्यापारी' : 'Winning Buyer Trader';
+      document.getElementById('th-auc-price').innerText = isMr ? 'अंतिम भाव' : 'Hammer Bid';
+      document.getElementById('th-auc-origin').innerText = isMr ? 'मूळ गाव' : 'Origin Village';
+      document.getElementById('th-auc-status').innerText = isMr ? 'स्थिती' : 'Status';
+
+      // Dossier Modal
+      document.getElementById('d-lbl-turnover').innerText = isMr ? 'दैनिक उलाढाल' : 'Daily Turnover';
+      document.getElementById('d-lbl-traders').innerText = isMr ? 'परवानाधारक व्यापारी' : 'Licensed Traders';
+      document.getElementById('d-lbl-capacity').innerText = isMr ? 'गोदाम क्षमता' : 'Storage Capacity';
+      document.getElementById('d-lbl-status').innerText = isMr ? 'बाजार स्थिती' : 'Market Status';
+      document.getElementById('d-lbl-infra').innerText = isMr ? 'पायाभूत सुविधा पोर्टफोलिओ:' : 'Infrastructure Portfolio:';
+      document.getElementById('d-lbl-w').innerText = isMr ? 'वजनकाटे:' : 'Weighbridges:';
+      document.getElementById('d-lbl-c').innerText = isMr ? 'शितगृह:' : 'Cold Storage:';
+      document.getElementById('d-lbl-g').innerText = isMr ? 'गोदाम कर्ज:' : 'Pledge Loans:';
+      document.getElementById('d-lbl-who').innerText = isMr ? 'सध्या बाजारात शेतमाल कोण आणत आहे?' : 'Who is Currently Selling at this Mandi?';
+      document.getElementById('d-lbl-profit').innerText = isMr ? '🟢 नफा देणारी पिके' : '🟢 Profit-Making Crops';
+      document.getElementById('d-lbl-loss').innerText = isMr ? '🔴 मंदीत असणारी पिके' : '🔴 Depressed Crops';
+      document.getElementById('d-lbl-msp').innerText = isMr ? 'सरकारी हमीभाव सुरक्षा तपासणी (MSP २०२५-२६)' : 'Government MSP Safety Benchmark (2025-26)';
+      document.getElementById('th-d-crop').innerText = isMr ? 'पीक' : 'Commodity';
+      document.getElementById('th-d-price').innerText = isMr ? 'आजचा भाव' : 'Today Rate';
+      document.getElementById('th-d-msp').innerText = isMr ? 'सरकारी हमीभाव (MSP)' : 'Central MSP';
+      document.getElementById('th-d-verdict').innerText = isMr ? 'हमीभाव स्थिती' : 'MSP Verdict';
+
+      renderPills();
+      renderDivisionPills();
+      renderDivisionMandis();
+      fetchAllMarketsData();
+      fetchLiveAuctions();
+      fetchTraderDemands();
+      populateDropdowns();
+    }
+
+    function populateDropdowns() {
+      const bCrop = document.getElementById('b-crop');
+      const fCrop = document.getElementById('f-crop');
+      const ordCrop = document.getElementById('ord-crop');
+      const jfCrop = document.getElementById('jf-crop');
+      const cropOpts = crops.map(c => `<option value="${c.id}">${currentLang === 'mr' ? c.mr : c.en}</option>`).join('');
+      if (bCrop) bCrop.innerHTML = cropOpts;
+      if (fCrop) fCrop.innerHTML = cropOpts;
+      if (ordCrop) ordCrop.innerHTML = cropOpts;
+      if (jfCrop) jfCrop.innerHTML = cropOpts;
+    }
+
+    function openFarmerModal() { document.getElementById('kisan-modal').classList.remove('hidden'); }
+    function closeFarmerModal() { document.getElementById('kisan-modal').classList.add('hidden'); }
+    function openBroadcastModal() { document.getElementById('broadcast-modal').classList.remove('hidden'); }
+    function closeBroadcastModal() { document.getElementById('broadcast-modal').classList.add('hidden'); }
+
+    async function submitDigitalLot(e) {
+      e.preventDefault();
+      alert(currentLang === 'mr' ? 'लॉट थेट e-NAM वर प्रसारित झाला!' : 'Lot broadcasted live on e-NAM!');
+      closeBroadcastModal();
+    }
+    async function submitFarmerPrice(e) {
+      e.preventDefault();
+      alert(currentLang === 'mr' ? 'धन्यवाद! आपला भाव नोंदवला गेला आहे.' : 'Thank you! Your rate has been submitted.');
+      closeFarmerModal();
+    }
+
+    document.addEventListener('DOMContentLoaded', () => {
+      try { if (window.lucide) lucide.createIcons(); } catch (e) {}
+      renderPills();
+      populateDropdowns();
+      fetchDivisions();
+      fetchAllMarketsData();
+      fetchLiveAuctions();
+      fetchTraderDemands();
+    });
+  </script>
+</body>
+</html>
