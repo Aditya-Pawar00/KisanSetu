@@ -680,3 +680,28 @@ def get_metadata():
     latest_date = _DATASET["arrival_date"].max()
     date_str = pd.to_datetime(latest_date).strftime("%Y-%m-%d")
     return {"commodities": commodities, "districts": districts, "latest_date": date_str}
+
+
+@app.get("/manifest.json")
+def get_manifest_json():
+    from fastapi.responses import JSONResponse
+    return {
+        "name": "KisanSetu - Maharashtra APMC",
+        "short_name": "KisanSetu",
+        "start_url": "/",
+        "id": "/",
+        "display": "standalone",
+        "background_color": "#f8fafc",
+        "theme_color": "#15803d",
+        "description": "Maharashtra 76 APMC Mandi Live Rates and Farmer Auction Slips",
+        "icons": [
+            {"src": "https://cdn-icons-png.flaticon.com/512/2990/2990479.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+            {"src": "https://cdn-icons-png.flaticon.com/512/2990/2990479.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+        ]
+    }
+
+@app.get("/sw.js")
+def get_service_worker_file():
+    from fastapi.responses import Response
+    sw = "self.addEventListener('install', e => self.skipWaiting()); self.addEventListener('activate', e => clients.claim()); self.addEventListener('fetch', e => e.respondWith(fetch(e.request).catch(() => new Response('Offline'))));"
+    return Response(content=sw, media_type="application/javascript")
